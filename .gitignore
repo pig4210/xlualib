@@ -1,0 +1,10 @@
+Release
+!xlualib.dll
+!xlualib.lib
+/ipch
+/xlualib -*
+/*.swp
+/*.*~
+/*.sdf
+/*.opensdf
+/*.rar

@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Lua">
+      <UniqueIdentifier>{9c836366-6a3f-4585-8567-0eaa199ed0e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="预处理">
+      <UniqueIdentifier>{4785a426-449d-49eb-a577-0a67d8e48633}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="xlualib.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lxlog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ls_ws.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lzlib.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lopenssl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lalgorithm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lhex_str.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lutf8.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lsock.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lserialcomm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lxhttp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lwinapi.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="lmkmem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ldes.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="laes.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="xlualib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lxlog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ls_ws.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lzlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lopenssl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lalgorithm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lhex_str.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lutf8.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lsock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lserialcomm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lxhttp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lwinapi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lmkmem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ldes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="laes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lua\lxlog.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\ls_ws.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lopenssl.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lzlib.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lalgorithm.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lhex_str.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lutf8.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lsock.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lxline.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lserialcomm.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lwinapi.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lmkmem.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lxhttp.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="xlua.lua" />
+    <None Include="Pack.bat">
+      <Filter>预处理</Filter>
+    </None>
+    <None Include="Lua\laes.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\ldes.lua">
+      <Filter>Lua</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="xlualib.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

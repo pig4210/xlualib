@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{043D41C1-D081-4F7C-851A-CC2F5500D18C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>TXDataAnalyzer_Cryptography</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\xlib;..\Lua\include;..\zlib\include;..\openssl\include;..\curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>true</OmitFramePointers>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4800;4267;4996;4702;4244;4210;4310;4324</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\xlib;..\Lua\x86;..\zlib\x86;..\openssl\x86;..\curl\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>pack x86</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN64;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\xlib;..\Lua\include;..\zlib\include;..\openssl\include;..\curl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>true</OmitFramePointers>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <DisableSpecificWarnings>4800;4267;4996;4702;4244;4210;4310;4324</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\xlib;..\Lua\x64;..\zlib\x64;..\openssl\x64;..\curl\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>pack 64</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="laes.cpp" />
+    <ClCompile Include="lalgorithm.cpp" />
+    <ClCompile Include="ldes.cpp" />
+    <ClCompile Include="lwinapi.cpp" />
+    <ClCompile Include="lhex_str.cpp" />
+    <ClCompile Include="lmkmem.cpp" />
+    <ClCompile Include="lopenssl.cpp" />
+    <ClCompile Include="lserialcomm.cpp" />
+    <ClCompile Include="lsock.cpp" />
+    <ClCompile Include="ls_ws.cpp" />
+    <ClCompile Include="lutf8.cpp" />
+    <ClCompile Include="lxhttp.cpp" />
+    <ClCompile Include="lxlog.cpp" />
+    <ClCompile Include="lzlib.cpp" />
+    <ClCompile Include="xlualib.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="laes.h" />
+    <ClInclude Include="lalgorithm.h" />
+    <ClInclude Include="ldes.h" />
+    <ClInclude Include="lwinapi.h" />
+    <ClInclude Include="lhex_str.h" />
+    <ClInclude Include="lmkmem.h" />
+    <ClInclude Include="lopenssl.h" />
+    <ClInclude Include="lserialcomm.h" />
+    <ClInclude Include="lsock.h" />
+    <ClInclude Include="ls_ws.h" />
+    <ClInclude Include="lutf8.h" />
+    <ClInclude Include="lxhttp.h" />
+    <ClInclude Include="lxlog.h" />
+    <ClInclude Include="lzlib.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="xlualib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Lua\laes.lua" />
+    <None Include="Lua\ldes.lua" />
+    <None Include="Lua\lhex_str.lua" />
+    <None Include="Lua\lalgorithm.lua" />
+    <None Include="Lua\lwinapi.lua" />
+    <None Include="Lua\lmkmem.lua" />
+    <None Include="Lua\lopenssl.lua" />
+    <None Include="Lua\lserialcomm.lua" />
+    <None Include="Lua\lsock.lua" />
+    <None Include="Lua\ls_ws.lua" />
+    <None Include="Lua\lutf8.lua" />
+    <None Include="Lua\lxhttp.lua" />
+    <None Include="Lua\lxline.lua" />
+    <None Include="Lua\lxlog.lua" />
+    <None Include="Lua\lzlib.lua" />
+    <None Include="Pack.bat" />
+    <None Include="xlua.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="xlualib.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
