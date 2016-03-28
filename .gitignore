@@ -8,3 +8,5 @@ Release
 /*.sdf
 /*.opensdf
 /*.rar
+
+mk_svn.bat
