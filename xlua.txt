@@ -644,7 +644,7 @@ DES解密：不对齐部分不解密，忽略之
         --返回UDP{server/client}:########    local_ip:port >> link_ip:port
         
     UDP       UDP:settimeout  ( int timeout );                              [-1, +1, v]
-        --收发延时，毫秒计
+        --接收延时，毫秒计
 
     UDP       UDP:broadcast   ( bool set );                                 [-1, +1, v]
         --广播设置
@@ -692,15 +692,22 @@ DES解密：不对齐部分不解密，忽略之
         --返回TCP{server/client}:########    local_ip:port >> link_ip:port
         
     TCP       TCP:settimeout  ( int timeout );                              [-1, +1, v]
-        --收发延时，毫秒计
+        --接收延时，毫秒计。Server不支持
 
     TCP       TCP:broadcast   ( bool set );                                 [-1, +1, v]
-        --广播设置
+        --广播设置。Server不支持
 
     TCP       TCP:send        ( string data );                            [-1, +1, c|v]
+        --发送数据。Server不支持
         
     string    TCP:recv        ( [ int size = 0x800 ] );               [-0|1, +1|2, c|v]
         --当不提供size时，默认提供0x800的接收缓冲区
+        --超时返回nil, "timeout"。Server不支持
+    TCP       TCP:accept      ( [ int timeout == -1 ]);                 [-0|1, +1|2, v]
+        --Client不支持
+        --当不提供timeout时，默认超时值-1，即阻塞直到连接发生
+        --当提供timeout(毫秒计)时，阻塞指定时间，直到连接发生或超时返回
+        --连接发生时，返回新连接的TCP对象
         --超时返回nil, "timeout"
 
 

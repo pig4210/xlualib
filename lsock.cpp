@@ -54,7 +54,7 @@ static int LUA_C_udp_getsockname(lua_State* ls)
   int addr_len = sizeof(addr);
   getsockname(st->sock, (sockaddr*)&addr, &addr_len);
 
-  const auto port = (st->bind_port != 0) ? st->bind_port : addr.sin_port;
+  const auto port = (st->bind_port != 0) ? htons(st->bind_port) : addr.sin_port;
 
 //   if(addr.sin_addr.S_un.S_addr == 0)
 //     {
@@ -246,7 +246,7 @@ static int LUA_C_udp_recv(lua_State* ls)
     }
   if(recvlen == SOCKET_ERROR)
     {
-    int codes = WSAGetLastError();
+    const int codes = WSAGetLastError();
     switch(codes)
       {
       case WSAETIMEDOUT:
@@ -437,7 +437,7 @@ static int LUA_C_tcp_getsockname(lua_State* ls)
   int addr_len = sizeof(addr);
   getsockname(st->sock, (sockaddr*)&addr, &addr_len);
 
-  const auto port = (st->bind_port != 0) ? st->bind_port : addr.sin_port;
+  const auto port = (st->bind_port != 0) ? htons(st->bind_port) : addr.sin_port;
 
   xmsg msg;
   msg
@@ -484,7 +484,7 @@ static int LUA_C_tcp_tostring(lua_State* ls)
   SOCKET_ST* st = (SOCKET_ST*)luaL_checkudata(ls, 1, gk_tcp_register);
   xmsg msg;
   msg << gk_tcp_register;
-  if(st->addr.sin_addr.s_addr == INADDR_ANY && st->addr.sin_port != 0)
+  if(st->bind_port != 0)
     {
     msg << "{server}";
     }
@@ -510,6 +510,9 @@ static int LUA_C_tcp_tostring(lua_State* ls)
 static int LUA_C_tcp_settimeout(lua_State* ls)
   {
   SOCKET_ST* st = (SOCKET_ST*)luaL_checkudata(ls, 1, gk_tcp_register);
+  if(st->bind_port != 0)
+    return TCP_ERROR(ls, st, "TCP Server不支持此功能");
+
   const int timeout = luaL_checkinteger(ls, 2);
 
   if(setsockopt(st->sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout)))
@@ -523,6 +526,9 @@ static int LUA_C_tcp_settimeout(lua_State* ls)
 static int LUA_C_tcp_broadcast(lua_State* ls)
   {
   SOCKET_ST* st = (SOCKET_ST*)luaL_checkudata(ls, 1, gk_tcp_register);
+  if(st->bind_port != 0)
+    return TCP_ERROR(ls, st, "TCP Server无法支持广播");
+
   const BOOL b = lua_toboolean(ls, 2);
 
   if(setsockopt(st->sock, SOL_SOCKET, SO_BROADCAST, (char*)&b, sizeof(b)))
@@ -536,6 +542,10 @@ static int LUA_C_tcp_broadcast(lua_State* ls)
 static int LUA_C_tcp_send(lua_State* ls)
   {
   SOCKET_ST* st = (SOCKET_ST*)luaL_checkudata(ls, 1, gk_tcp_register);
+
+  if(st->bind_port != 0)
+    return TCP_ERROR(ls, st, "TCP Server无法发送数据");
+
   size_t len = 0;
   const char* buf = luaL_checklstring(ls, 2, &len);
 
@@ -568,6 +578,9 @@ static int LUA_C_tcp_send(lua_State* ls)
 static int LUA_C_tcp_recv(lua_State* ls)
   {
   SOCKET_ST* st = (SOCKET_ST*)luaL_checkudata(ls, 1, gk_tcp_register);
+  if(st->bind_port != 0)
+    return TCP_ERROR(ls, st, "TCP Server无法接收数据");
+
   char buf[0x800];
   const int len = luaL_optinteger(ls, 2, sizeof(buf));
 
@@ -586,7 +599,7 @@ static int LUA_C_tcp_recv(lua_State* ls)
     }
   if(recvlen == SOCKET_ERROR)
     {
-    int codes = WSAGetLastError();
+    const int codes = WSAGetLastError();
     switch(codes)
       {
       case WSAETIMEDOUT:
@@ -607,6 +620,53 @@ static int LUA_C_tcp_recv(lua_State* ls)
   return 1;
   }
 
+static int LUA_C_tcp_accept(lua_State* ls)
+  {
+  SOCKET_ST* st = (SOCKET_ST*)luaL_checkudata(ls, 1, gk_tcp_register);
+
+  if(st->bind_port == 0)
+    return TCP_ERROR(ls, st, "TCP Client不能接受连接");
+
+  const size_t timeout = luaL_optinteger(ls, 2, -1);
+
+  timeval t;
+  t.tv_sec = timeout / 1000;
+  t.tv_usec = timeout % 1000;
+
+  const timeval* lpt = (timeout == -1) ? nullptr : &t;
+
+  fd_set s;
+  s.fd_count = 1;
+  s.fd_array[0] = st->sock;
+
+  switch(select(1, &s, nullptr, nullptr, lpt))
+    {
+    case SOCKET_ERROR:
+      return TCP_ERROR(ls, st, "TCP监听连接失败");
+    case 0:
+      lua_pushnil(ls);
+      lua_pushstring(ls, "timeout");
+      return 2;
+    default:
+      break;
+    }
+
+  sockaddr_in addr;
+  memset(&addr, 0, sizeof(addr));
+  int namelen = sizeof(addr);
+  const SOCKET hS = accept(st->sock, (sockaddr*)&addr, &namelen);
+  if(hS == INVALID_SOCKET)
+    return TCP_ERROR(ls, st, xmsg() << "TCP接受连接失败:" << WSAGetLastError());
+
+  st = (SOCKET_ST*)lua_newuserdata(ls, sizeof(*st));
+  st->sock = hS;
+  st->addr = addr;
+  st->bind_port = 0;
+
+  luaL_setmetatable(ls, gk_tcp_register);
+  return 1;
+  }
+
 
 static const luaL_Reg gkTCPLib[] =
   {
@@ -620,6 +680,7 @@ static const luaL_Reg gkTCPLib[] =
     { "broadcast",    LUA_C_tcp_broadcast },
     { "send",         LUA_C_tcp_send },
     { "recv",         LUA_C_tcp_recv },
+    { "accept",       LUA_C_tcp_accept },
     { nullptr, nullptr }
   };
 
@@ -656,12 +717,6 @@ static int LUA_C_tcp_new(lua_State* ls)
     {
     auto addr = AddrInfo(ip, port);
 
-    if(addr.sin_addr.S_un.S_addr == INADDR_ANY || addr.sin_port == 0)
-      {
-      lua_pushstring(ls, "tcp socket 请明确指定连接的地址、端口");
-      return lua_error(ls);
-      }
-
     if(bind_port != 0)
       {
       auto s = AddrInfo(INADDR_ANY, bind_port);
@@ -675,17 +730,34 @@ static int LUA_C_tcp_new(lua_State* ls)
         lua_pushstring(ls, msg.c_str());
         return lua_error(ls);
         }
+      if(listen(sock, 0))
+        {
+        shutdown(sock, SD_BOTH);
+        closesocket(sock);
+        xmsg msg;
+        msg << "tcp socket监听[" << (intptr_t)htons(addr.sin_port)
+          << "]失败:" << (intptr_t)WSAGetLastError();
+        lua_pushstring(ls, msg.c_str());
+        return lua_error(ls);
+        }
       }
-
-    if(connect(sock, (sockaddr*)&addr, sizeof(addr)))
+    else
       {
-      shutdown(sock, SD_BOTH);
-      closesocket(sock);
-      xmsg msg;
-      msg << "tcp socket连接[" << IpString(addr)
-        << "]失败:" << (intptr_t)WSAGetLastError();
-      lua_pushstring(ls, msg.c_str());
-      return lua_error(ls);
+      if(addr.sin_addr.S_un.S_addr == INADDR_ANY || addr.sin_port == 0)
+        {
+        lua_pushstring(ls, "tcp socket 请明确指定连接的地址、端口");
+        return lua_error(ls);
+        }
+      if(connect(sock, (sockaddr*)&addr, sizeof(addr)))
+        {
+        shutdown(sock, SD_BOTH);
+        closesocket(sock);
+        xmsg msg;
+        msg << "tcp socket连接[" << IpString(addr)
+          << "]失败:" << (intptr_t)WSAGetLastError();
+        lua_pushstring(ls, msg.c_str());
+        return lua_error(ls);
+        }
       }
 
     luaL_getmetatable(ls, gk_tcp_register);
