@@ -65,6 +65,7 @@ int luaopen_xlualib(lua_State* ls)
   register_sock(ls);
   register_serialcomm(ls);
   register_xhttp(ls);
+  register_blowfish(ls);
 
   load_my_lua(ls);
   return 0;

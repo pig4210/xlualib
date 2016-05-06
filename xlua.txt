@@ -1,4 +1,4 @@
-xlua版本 3.2
+xlua版本 3.3
 
 
 -------- -------- -------- --------
@@ -17,7 +17,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
     string    aes_ecb_pkcs7padding_decrypt
@@ -25,7 +25,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
     string    aes.ecb.p7enc             ( ... );                        [-2|3, +1, c|v]
@@ -39,7 +39,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes_cbc_pkcs7padding_decrypt
@@ -48,7 +48,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes.cbc.p7enc             ( ... );                      [-2|3|4, +1, c|v]
@@ -62,7 +62,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
     string    aes_ecb_decrypt
@@ -70,13 +70,13 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
-    string    aes.ecb.enc            ( ... );                           [-2|3, +1, c|v]
-    string    aes.ecb.enc            ( ... );                           [-2|3, +1, c|v]
-    string    string:aes_ecb_enc     ( ... );                           [-1|2, +1, c|v]
-    string    string:aes_ecb_dec     ( ... );                           [-1|2, +1, c|v]
+    string    aes.ecb.enc               ( ... );                        [-2|3, +1, c|v]
+    string    aes.ecb.enc               ( ... );                        [-2|3, +1, c|v]
+    string    string:aes_ecb_enc        ( ... );                        [-1|2, +1, c|v]
+    string    string:aes_ecb_dec        ( ... );                        [-1|2, +1, c|v]
     
     string    aes_cbc_encrypt
                                         (
@@ -84,7 +84,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes_cbc_decrypt
@@ -93,7 +93,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes.cbc.enc            ( ... );                         [-2|3|4, +1, c|v]
@@ -179,6 +179,102 @@ AES解密：不对齐部分不解密，忽略之
     
     string    string:aes_enc  ( string key );                               [-1, +1, c]
     string    string:aes_dec  ( string key );                               [-1, +1, c]
+
+
+
+-------- -------- -------- --------
+           BLOWFISH
+-------- -------- -------- --------
+BLOWFISH加密：使用padding时，自动pkcs7padding。否则不对齐部分不加密，忽略之
+BLOWFISH解密：不对齐部分不解密，忽略之
+不使用padding时，默认块大小==8
+提供的KEY长度不足8时，以0补足
+
+
+
+●
+    string    blowfish_ecb_pkcs7padding_encrypt
+                                        (
+                                        string data,
+                                        string key
+                                        );                              [-2|3, +1, c|v]
+    string    blowfish_ecb_pkcs7padding_decrypt
+                                        (
+                                        string data,
+                                        string key
+                                        );                              [-2|3, +1, c|v]
+    string    blowfish.ecb.p7enc        ( ... );                        [-2|3, +1, c|v]
+    string    blowfish.ecb.p7dec        ( ... );                        [-2|3, +1, c|v]
+    string    string:bf_ecb_p7_enc      ( ... );                        [-1|2, +1, c|v]
+    string    string:bf_ecb_p7_dec      ( ... );                        [-1|2, +1, c|v]
+    
+    string    blowfish_cbc_pkcs7padding_encrypt
+                                        (
+                                        string data,
+                                        string key
+                                        [,
+                                        string ivec = "\0\0\0\0\0\0\0\0"
+                                        ]
+                                        );                            [-2|3|4, +1, c|v]
+    string    blowfish_cbc_pkcs7padding_decrypt
+                                        (
+                                        string data,
+                                        string key
+                                        [,
+                                        string ivec = "\0\0\0\0\0\0\0\0",
+                                        int    block_size = 16
+                                        ]
+                                        );                            [-2|3|4, +1, c|v]
+    string    blowfish.cbc.p7enc        ( ... );                      [-2|3|4, +1, c|v]
+    string    blowfish.cbc.p7dec        ( ... );                      [-2|3|4, +1, c|v]
+    string    string:bf_cbc_p7_enc      ( ... );                      [-1|2|3, +1, c|v]
+    string    string:bf_cbc_p7_dec      ( ... );                      [-1|2|3, +1, c|v]
+    
+    -------- -------- -------- -------- 
+    string    blowfish_ecb_encrypt
+                                        (
+                                        string data,
+                                        string key
+                                        [,
+                                        int    block_size = 16
+                                        ]
+                                        );                              [-2|3, +1, c|v]
+    string    blowfish_ecb_decrypt
+                                        (
+                                        string data,
+                                        string key
+                                        [,
+                                        int    block_size = 16
+                                        ]
+                                        );                              [-2|3, +1, c|v]
+    string    blowfish.ecb.enc          ( ... );                        [-2|3, +1, c|v]
+    string    blowfish.ecb.enc          ( ... );                        [-2|3, +1, c|v]
+    string    string:bf_ecb_enc         ( ... );                        [-1|2, +1, c|v]
+    string    string:bf_ecb_dec         ( ... );                        [-1|2, +1, c|v]
+    
+    string    blowfish_cbc_encrypt
+                                        (
+                                        string data,
+                                        string key
+                                        [,
+                                        string ivec = "\0\0\0\0\0\0\0\0",
+                                        int    block_size = 16
+                                        ]
+                                        );                            [-2|3|4, +1, c|v]
+    string    blowfish_cbc_decrypt
+                                        (
+                                        string data,
+                                        string key
+                                        [,
+                                        string ivec = "\0\0\0\0\0\0\0\0",
+                                        int    block_size = 16
+                                        ]
+                                        );                            [-2|3|4, +1, c|v]
+    string    blowfish.cbc.enc          ( ... );                      [-2|3|4, +1, c|v]
+    string    blowfish.cbc.dec          ( ... );                      [-2|3|4, +1, c|v]
+    string    string:bf_cbc_enc         ( ... );                      [-1|2|4, +1, c|v]
+    string    string:bf_cbc_dec         ( ... );                      [-1|2|4, +1, c|v]
+    
 
 
 

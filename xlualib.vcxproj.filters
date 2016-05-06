@@ -66,6 +66,9 @@
     <ClCompile Include="laes.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="lblowfish.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xlualib.h">
@@ -114,6 +117,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="laes.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lblowfish.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -165,6 +171,9 @@
       <Filter>Lua</Filter>
     </None>
     <None Include="Lua\ldes.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lblowfish.lua">
       <Filter>Lua</Filter>
     </None>
   </ItemGroup>

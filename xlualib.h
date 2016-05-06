@@ -24,3 +24,4 @@ using namespace std;
 #include "lxhttp.h"
 #include "ldes.h"
 #include "laes.h"
+#include "lblowfish.h"

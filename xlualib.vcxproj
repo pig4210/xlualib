@@ -113,6 +113,7 @@
   <ItemGroup>
     <ClCompile Include="laes.cpp" />
     <ClCompile Include="lalgorithm.cpp" />
+    <ClCompile Include="lblowfish.cpp" />
     <ClCompile Include="ldes.cpp" />
     <ClCompile Include="lwinapi.cpp" />
     <ClCompile Include="lhex_str.cpp" />
@@ -130,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="laes.h" />
     <ClInclude Include="lalgorithm.h" />
+    <ClInclude Include="lblowfish.h" />
     <ClInclude Include="ldes.h" />
     <ClInclude Include="lwinapi.h" />
     <ClInclude Include="lhex_str.h" />
@@ -147,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Lua\laes.lua" />
+    <None Include="Lua\lblowfish.lua" />
     <None Include="Lua\ldes.lua" />
     <None Include="Lua\lhex_str.lua" />
     <None Include="Lua\lalgorithm.lua" />

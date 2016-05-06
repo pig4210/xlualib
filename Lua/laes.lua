@@ -15,7 +15,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
     string    aes_ecb_pkcs7padding_decrypt
@@ -23,7 +23,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
     string    aes.ecb.p7enc             ( ... );                        [-2|3, +1, c|v]
@@ -37,7 +37,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes_cbc_pkcs7padding_decrypt
@@ -46,7 +46,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes.cbc.p7enc             ( ... );                      [-2|3|4, +1, c|v]
@@ -60,7 +60,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
     string    aes_ecb_decrypt
@@ -68,13 +68,13 @@ AES解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                              [-2|3, +1, c|v]
-    string    aes.ecb.enc            ( ... );                           [-2|3, +1, c|v]
-    string    aes.ecb.enc            ( ... );                           [-2|3, +1, c|v]
-    string    string:aes_ecb_enc     ( ... );                           [-1|2, +1, c|v]
-    string    string:aes_ecb_dec     ( ... );                           [-1|2, +1, c|v]
+    string    aes.ecb.enc               ( ... );                        [-2|3, +1, c|v]
+    string    aes.ecb.enc               ( ... );                        [-2|3, +1, c|v]
+    string    string:aes_ecb_enc        ( ... );                        [-1|2, +1, c|v]
+    string    string:aes_ecb_dec        ( ... );                        [-1|2, +1, c|v]
     
     string    aes_cbc_encrypt
                                         (
@@ -82,7 +82,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes_cbc_decrypt
@@ -91,7 +91,7 @@ AES解密：不对齐部分不解密，忽略之
                                         string key
                                         [,
                                         string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 8
+                                        int    block_size = 16
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    aes.cbc.enc            ( ... );                         [-2|3|4, +1, c|v]
