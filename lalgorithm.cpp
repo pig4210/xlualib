@@ -209,6 +209,34 @@ static int LUA_C_aes_decrypt(lua_State* ls)
   return 1;
   }
 //////////////////////////////////////////////////////////////////////////
+static int LUA_C_des_encrypt(lua_State* ls)
+  {
+  size_t l = 0;
+  const auto s = luaL_checklstring(ls, 1, &l);
+
+  size_t ll = 0;
+  const auto key = luaL_checklstring(ls, 2, &ll);
+
+  const auto res(DesEncrypt(s, l, key));
+
+  lua_pushlstring(ls, (const char*)res.c_str(), res.size());
+  return 1;
+  }
+
+static int LUA_C_des_decrypt(lua_State* ls)
+  {
+  size_t l = 0;
+  const auto s = luaL_checklstring(ls, 1, &l);
+
+  size_t ll = 0;
+  const auto key = luaL_checklstring(ls, 2, &ll);
+
+  const auto res(DesDecrypt(s, l, key));
+
+  lua_pushlstring(ls, (const char*)res.c_str(), res.size());
+  return 1;
+  }
+//////////////////////////////////////////////////////////////////////////
 void register_algorithm(lua_State* ls)
   {
   lua_pop(ls, lua_gettop(ls));
@@ -240,6 +268,9 @@ void register_algorithm(lua_State* ls)
 
   lua_register(ls, "aes_encrypt", LUA_C_aes_encrypt);
   lua_register(ls, "aes_decrypt", LUA_C_aes_decrypt);
+
+  lua_register(ls, "des_encrypt", LUA_C_des_encrypt);
+  lua_register(ls, "des_decrypt", LUA_C_des_decrypt);
 
 
   lua_pop(ls, lua_gettop(ls));

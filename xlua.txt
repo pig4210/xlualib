@@ -1,4 +1,4 @@
-xlua版本 3.3
+xlua版本 4.1
 
 
 -------- -------- -------- --------
@@ -117,7 +117,7 @@ AES解密：不对齐部分不解密，忽略之
 
 ●
     string    strxor          ( string data, int xor );                     [-2, +1, -]
-    string    string:;xor     ( int xor );                                  [-1, +1, -]
+    string    string:xor      ( int xor );                                  [-1, +1, -]
 
 
 
@@ -179,6 +179,15 @@ AES解密：不对齐部分不解密，忽略之
     
     string    string:aes_enc  ( string key );                               [-1, +1, c]
     string    string:aes_dec  ( string key );                               [-1, +1, c]
+
+
+
+●
+    string    des_encrypt     ( string data, string key );                  [-2, +1, c]
+    string    des_decrypt     ( string data, string key );                  [-2, +1, c]
+    
+    string    string:des_enc  ( string key );                               [-1, +1, c]
+    string    string:des_dec  ( string key );                               [-1, +1, c]
 
 
 
@@ -472,6 +481,32 @@ DES解密：不对齐部分不解密，忽略之
                               bool      isup          = false
                               ]
                               );                                          [-0|1, +1, -]
+
+                              
+    string.hexs = string.str2hexs;
+    string.shwo = string.hex2show;
+
+
+
+●
+    string    ws2s            ( string s );     --unicode转换为ascii        [-1, +1, c]
+    string    s2ws            ( string ws );    --ascii转换为unicode        [-1, +1, c]
+
+    string    string:ws2s     ( );              --unicode转换为ascii        [-0, +1, -]
+    string    string:s2ws     ( );              --ascii转换为unicode        [-0, +1, -]
+
+
+
+●
+    string    utf82ws         ( string utf8 );   --utf8转换为unicode        [-1, +1, c]
+    string    ws2utf8         ( string ws );     --unicode转换为utf8        [-1, +1, c]
+    string    utf82s          ( string utf8 );   --utf8转换为ascii          [-1, +1, c]
+    string    s2utf8          ( string s );      --ascii转换为utf8          [-1, +1, c]
+    
+    string    string:utf82ws  ( );                                          [-0, +1, -]
+    string    string:ws2utf8  ( );                                          [-0, +1, -]
+    string    string:utf82s   ( );                                          [-0, +1, -]
+    string    string:s2utf8   ( );                                          [-0, +1, -]
 
 
 
@@ -482,29 +517,96 @@ DES解密：不对齐部分不解密，忽略之
 
 
 ●
-    string    readmem         ( void* lpmem, size_t size );                 [-2, +1, c]
+    string [, string errmsg]
+              readmem         ( void* lpmem, size_t size );               [-2, +1|2, c]
                                                 --读取指定内存位置指定长度数据
+                                                --无论指定内存位置是否有效都无异常抛出
+                                                --读取失败返回空串, 错误消息
+    bool [, string errmsg]
+              writemem        ( void* lpmem, string writebytes );         [-2, +1|2, c]
+                                                --写入指定内存位置指定长度数据
+                                                --无论指定内存位置是否有效都无异常抛出
+                                                --写失败返回false, 错误消息
+    unsigned char*
+              newmem          ( size_t size );                              [-1, +1, c]
+                                                --指定字节大小，申请内存
+                                                --成功则返回内存指针
+                                                --size == 0或失败则返回nullptr
+    bool      deletemem       ( unsigned char* lpmem );                     [-1, +1, c]
+                                                --释放由newmem申请的内存
     
     --以下函数需要5.3及以上的string.unpack支持。低版本请自行修改源码添加之
-    int       mkb             ( void* lpmem );  --读取有符号byte值，小端  [-1, +1, c|e]
-    int       mkB             ( void* lpmem );  --读取无符号byte值，小端  [-1, +1, c|e]
-    int       mkbb            ( void* lpmem );  --读取有符号byte值，大端  [-1, +1, c|e]
-    int       mkBB            ( void* lpmem );  --读取无符号byte值，大端  [-1, +1, c|e]
+    int|bool [, string]
+              mkb             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号byte值，小端
+    int|bool [, string]
+              mkB             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号byte值，小端
+    int|bool [, string]
+              mkbb            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号byte值，大端
+    int|bool [, string]
+              mkBB            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号byte值，大端
 
-    int       mkw             ( void* lpmem );  --读取有符号word值，小端  [-1, +1, c|e]
-    int       mkW             ( void* lpmem );  --读取无符号word值，小端  [-1, +1, c|e]
-    int       mkww            ( void* lpmem );  --读取有符号word值，大端  [-1, +1, c|e]
-    int       mkWW            ( void* lpmem );  --读取无符号word值，大端  [-1, +1, c|e]
+    int|bool [, string]
+              mkw             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号word值，小端
+    int|bool [, string]
+              mkW             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号word值，小端
+    int|bool [, string]
+              mkww            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号word值，大端
+    int|bool [, string]
+              mkWW            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号word值，大端
+                                                
+    int|bool [, string]
+              mkd             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号dword值，小端
+    int|bool [, string]
+              mkD             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号dword值，小端
+    int|bool [, string]
+              mkdd            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号dword值，大端
+    int|bool [, string]
+              mkDD            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号dword值，大端
     
-    int       mkd             ( void* lpmem );  --读取有符号dword值，小端 [-1, +1, c|e]
-    int       mkD             ( void* lpmem );  --读取无符号dword值，小端 [-1, +1, c|e]
-    int       mkdd            ( void* lpmem );  --读取有符号dword值，大端 [-1, +1, c|e]
-    int       mkDD            ( void* lpmem );  --读取无符号dword值，大端 [-1, +1, c|e]
+    int|bool [, string]
+              mkq             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号qword值，小端
+    int|bool [, string]
+              mkQ             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号qword值，小端
+    int|bool [, string]
+              mkqq            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号qword值，大端
+    int|bool [, string]
+              mkQQ            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号qword值，大端
     
-    float     mkf             ( void* lpmem );  --读取float值，小端       [-1, +1, c|e]
-    double    mkF             ( void* lpmem );  --读取double值，小端      [-1, +1, c|e]
-    float     mkff            ( void* lpmem );  --读取float值，大端       [-1, +1, c|e]
-    double    mkFF            ( void* lpmem );  --读取double值，大端      [-1, +1, c|e]
+    float|bool [, string]
+              mkf             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写float值，小端
+    double|bool [, string]
+              mkF             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写double值，小端
+    float|bool [, string]
+              mkff            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写float值，大端
+    double|bool [, string]
+              mkFF            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写double值，大端
+                                                
+    int       bswap           ( int value [, int size] );                 [-1|2, +1, c]
+                                                --指定翻转数据
+    int       bswap_byte      ( int value );                                [-1, +1, c]
+    int       bswap_word      ( int value );                                [-1, +1, c]
+    int       bswap_dword     ( int value );                                [-1, +1, c]
+    int       bswap_qword     ( int value );                                [-1, +1, c]
 
 
 
@@ -551,14 +653,6 @@ DES解密：不对齐部分不解密，忽略之
     string    string:rsa_pub_dec        ( RsaKey key );                   [-1, +1, c|e]
     string    string:rsa_prv_enc        ( RsaKey key );                   [-1, +1, c|e]
     string    string:rsa_prv_dec        ( RsaKey key );                   [-1, +1, c|e]
-
-
-
-    string    des_encrypt               ( string data, string key );        [-2, +1, c]
-    string    des_decrypt               ( string data, string key );      [-2, +1, c|v]
-    
-    string    string:des_enc            ( string key );                     [-1, +1, c]
-    string    string:des_dec            ( string key );                   [-1, +1, c|v]
 
 
 
@@ -617,6 +711,38 @@ DES解密：不对齐部分不解密，忽略之
 
 
 -------- -------- -------- --------
+              PE操作
+-------- -------- -------- --------
+
+
+
+●
+    table     PE   ( HMOUDLE hmod = nullptr | string mod_name );          [-0|1, +1, c]
+        --返回
+          {
+          HMODULE                 hmod,
+          const IMAGE_DOS_HEADER* dos_head,
+          bool                    ispe,
+          const IMAGE_NT_HEADERS* pe_head,
+          void*                   entry,
+          table                   image =
+            {
+            void*                 start,
+            void*                 end,
+            size_t                size,
+            },
+          table                   code =
+            {
+            void*                 start,
+            void*                 end,
+            size_t                size,
+            },
+          }
+        --Lua5.3以下无法正确使用此函数
+
+
+
+-------- -------- -------- --------
           serialcomm操作
 -------- -------- -------- --------
 
@@ -642,7 +768,7 @@ DES解密：不对齐部分不解密，忽略之
 ●
     SerialComm[] serialcomm.opened;
         --保存使用serialcomm.open打开的串口对象，以便查询或通过serialcomm.close自动释放
-        --开放此表是为了方便查询，用户不应修改此表，以免造成serialcomm.close无法自动释放所有已打开的串口对象
+        --开放此表是为了方便查询，用户被禁止修改此表，以免造成serialcomm.close无法自动释放所有已打开的串口对象
         --表格式如示：{ SerailComm, SerailComm, ... };
         ex:
             for k, v in pairs(serialcomm.opened) do
@@ -809,40 +935,6 @@ DES解密：不对齐部分不解密，忽略之
 
 
 -------- -------- -------- --------
-             s&ws操作
--------- -------- -------- --------
-
-
-
-●
-    string    ws2s            ( string s );     --unicode转换为ascii        [-1, +1, c]
-    string    s2ws            ( string ws );    --ascii转换为unicode        [-1, +1, c]
-
-    string    string:ws2s     ( );              --unicode转换为ascii        [-0, +1, -]
-    string    string:s2ws     ( );              --ascii转换为unicode        [-0, +1, -]
-
-
-
--------- -------- -------- --------
-                utf8操作
--------- -------- -------- --------
-
-
-
-●
-    string    utf82ws         ( string utf8 );   --utf8转换为unicode        [-1, +1, c]
-    string    ws2utf8         ( string ws );     --unicode转换为utf8        [-1, +1, c]
-    string    utf82s          ( string utf8 );   --utf8转换为ascii          [-1, +1, c]
-    string    s2utf8          ( string s );      --ascii转换为utf8          [-1, +1, c]
-    
-    string    string:utf82ws  ( );                                          [-0, +1, -]
-    string    string:ws2utf8  ( );                                          [-0, +1, -]
-    string    string:utf82s   ( );                                          [-0, +1, -]
-    string    string:s2utf8   ( );                                          [-0, +1, -]
-
-
-
--------- -------- -------- --------
             api操作
 -------- -------- -------- --------
 
@@ -854,6 +946,25 @@ DES解密：不对齐部分不解密，忽略之
 
     int       gettick         ( );                                          [-0, +1, -]
         --获取系统启动时间毫秒数
+
+        
+    void      Sleep           ( [int ms = 0] );                           [-0|1, +0, -]
+        --暂停线程ms毫秒，ms允许为空
+        
+    int       GetTickCount    ( );                                          [-0, +1, -]
+        --获取系统启动时间毫秒数
+        
+    --Lua5.3以下无法正确使用以下函数
+    HMODULE   GetModuleHandle ( [string mod_name] );                      [-0|1, +1, -]
+
+    HMODULE [, int errcode]
+              LoadLibrary     ( string lib_name );                        [-1, +1|2, -]
+
+    bool [, int errocde]
+              FreeLibrary     ( HMODULE mode );                           [-1, +1|2, -]
+
+    void*     GetProcAddress  ( HMODULE mode, string name );              [-1, +1|2, -]
+
 
 
 
@@ -883,7 +994,7 @@ DES解密：不对齐部分不解密，忽略之
                                                     此项存在时，http访问为post。否则默认为get
           table     header;                       --访问头
           }
-        --访问头、响应头表以[键名] = 值形式组表
+        --访问头、响应头表以  [键名] = 值  形式组表
 
         ex:
           local c, h, b = xhttp("http://www.hj032.cn");
@@ -1087,6 +1198,9 @@ DES解密：不对齐部分不解密，忽略之
 ●
     void      xlog            ( ... );  --无条件输出debugview               [-?, +0, -]
         --注意，如果在加载前此函数被预定义，则使用预定义
+
+    void      dbgview         ( ... );  --无条件输出debugview               [-?, +0, -]
+        --此函数用于在xlog被替换的情况下，还可选择输出到debugview
 
 
 

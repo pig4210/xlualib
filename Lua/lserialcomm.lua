@@ -25,14 +25,28 @@
 ●
     SerialComm[] serialcomm.opened;
         --保存使用serialcomm.open打开的串口对象，以便查询或通过serialcomm.close自动释放
-        --开放此表是为了方便查询，用户不应修改此表，以免造成serialcomm.close无法自动释放所有已打开的串口对象
+        --开放此表是为了方便查询，用户被禁止修改此表，以免造成serialcomm.close无法自动释放所有已打开的串口对象
         --表格式如示：{ SerailComm, SerailComm, ... };
         ex:
             for k, v in pairs(serialcomm.opened) do
               xlog(k ,v);
             end
 ]=======]
-serialcomm.opened = { };
+
+local opened = {};
+
+serialcomm.opened = setmetatable(
+  {},
+  {
+  __index = opened;
+  __pairs = function( t )
+    return next, opened, nil;
+  end;
+  __newindex = function()
+    return error( "serialcomm.opened forbid modify!" );
+  end;
+  }
+  );
 --[=======[
     SerailComm serialcomm.open          ( string SerialCommName );        [-1, +1, c|v]
         --指定串口名称，打开串口，同时保存已经打开的对象至表serialcomm.opened
@@ -40,7 +54,7 @@ serialcomm.opened = { };
 ]=======]
 function serialcomm.open( name )
   local sc = serialcomm.raw_open( name );
-  serialcomm.opened[#serialcomm.opened + 1] = sc;
+  opened[#opened + 1] = sc;
   return sc;
 end
 --[=======[
@@ -48,10 +62,10 @@ end
         --释放表serialcomm.opened中所有的SerialComm对象并清空表
 ]=======]
 function serialcomm.close( )
-  for k, v in pairs(serialcomm.opened) do
+  for k, v in pairs(opened) do
     v:close();
   end
-  serialcomm.opened = {};
+  opened = {};
 end
 --[=======[
 ●

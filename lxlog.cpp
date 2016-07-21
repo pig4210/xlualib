@@ -36,5 +36,7 @@ void register_xlog(lua_State* ls)
     lua_register(ls, "xlog", LUA_C_xlog);
     }
 
+  lua_register(ls, "dbgview", LUA_C_xlog);
+
   lua_pop(ls, lua_gettop(ls));
   }

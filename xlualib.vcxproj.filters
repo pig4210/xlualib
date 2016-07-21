@@ -27,9 +27,6 @@
     <ClCompile Include="lxlog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ls_ws.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="lzlib.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -40,9 +37,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="lhex_str.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="lutf8.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="lsock.cpp">
@@ -69,15 +63,15 @@
     <ClCompile Include="lblowfish.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="lpe.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xlualib.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="lxlog.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ls_ws.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="lzlib.h">
@@ -90,9 +84,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="lhex_str.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lutf8.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="lsock.h">
@@ -122,12 +113,12 @@
     <ClInclude Include="lblowfish.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="lpe.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Lua\lxlog.lua">
-      <Filter>Lua</Filter>
-    </None>
-    <None Include="Lua\ls_ws.lua">
       <Filter>Lua</Filter>
     </None>
     <None Include="Lua\lopenssl.lua">
@@ -140,9 +131,6 @@
       <Filter>Lua</Filter>
     </None>
     <None Include="Lua\lhex_str.lua">
-      <Filter>Lua</Filter>
-    </None>
-    <None Include="Lua\lutf8.lua">
       <Filter>Lua</Filter>
     </None>
     <None Include="Lua\lsock.lua">
@@ -174,6 +162,9 @@
       <Filter>Lua</Filter>
     </None>
     <None Include="Lua\lblowfish.lua">
+      <Filter>Lua</Filter>
+    </None>
+    <None Include="Lua\lpe.lua">
       <Filter>Lua</Filter>
     </None>
   </ItemGroup>

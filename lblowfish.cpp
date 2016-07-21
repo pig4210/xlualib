@@ -39,7 +39,7 @@ static const string blowfish_data(lua_State* ls)
   return string(s, l);
   }
 
-static BF_KEY blowfish_key(lua_State* ls, const bool enc)
+static BF_KEY blowfish_key(lua_State* ls)
   {
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 2, &l);
@@ -54,7 +54,7 @@ static BF_KEY blowfish_key(lua_State* ls, const bool enc)
 static int blowfish_ecb(lua_State* ls, const int enc, const bool padding)
   {
   string data(blowfish_data(ls));
-  BF_KEY ks(blowfish_key(ls, enc));
+  BF_KEY ks(blowfish_key(ls));
 
   if(padding && enc == BF_ENCRYPT)
     {
@@ -93,7 +93,7 @@ static void blowfish_ivec(lua_State* ls, const int ivec_arg, unsigned char* ivec
 static int blowfish_cbc(lua_State* ls, const int enc, const bool padding)
   {
   string data(blowfish_data(ls));
-  BF_KEY ks(blowfish_key(ls, enc));
+  BF_KEY ks(blowfish_key(ls));
 
   unsigned char ivec[blowfish_block_size];
   blowfish_ivec(ls, 3, ivec);

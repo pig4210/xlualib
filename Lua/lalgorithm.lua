@@ -12,7 +12,7 @@
 --[=======[
 ¡ñ
     string    strxor          ( string data, int xor );                     [-2, +1, -]
-    string    string:;xor     ( int xor );                                  [-1, +1, -]
+    string    string:xor      ( int xor );                                  [-1, +1, -]
 ]=======]
 string.xor            =  function( ... ) return strxor                     ( ... ); end
 
@@ -92,3 +92,14 @@ string.xxtea_dec      =  function( ... ) return XxTeaDecrypt               ( ...
 ]=======]
 string.aes_enc        =  function( ... ) return aes_encrypt                ( ... ); end
 string.aes_dec        =  function( ... ) return aes_decrypt                ( ... ); end
+
+--[=======[
+¡ñ
+    string    des_encrypt     ( string data, string key );                  [-2, +1, c]
+    string    des_decrypt     ( string data, string key );                  [-2, +1, c]
+    
+    string    string:des_enc  ( string key );                               [-1, +1, c]
+    string    string:des_dec  ( string key );                               [-1, +1, c]
+]=======]
+string.des_enc        =  function( ... ) return des_encrypt                ( ... ); end
+string.des_dec        =  function( ... ) return des_decrypt                ( ... ); end

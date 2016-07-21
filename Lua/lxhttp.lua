@@ -25,7 +25,7 @@
                                                     此项存在时，http访问为post。否则默认为get
           table     header;                       --访问头
           }
-        --访问头、响应头表以[键名] = 值形式组表
+        --访问头、响应头表以  [键名] = 值  形式组表
 
         ex:
           local c, h, b = xhttp("http://www.hj032.cn");

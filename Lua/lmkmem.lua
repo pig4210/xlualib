@@ -6,94 +6,229 @@
 
 --[=======[
 ●
-    string    readmem         ( void* lpmem, size_t size );                 [-2, +1, c]
+    string [, string errmsg]
+              readmem         ( void* lpmem, size_t size );               [-2, +1|2, c]
                                                 --读取指定内存位置指定长度数据
+                                                --无论指定内存位置是否有效都无异常抛出
+                                                --读取失败返回空串, 错误消息
+    bool [, string errmsg]
+              writemem        ( void* lpmem, string writebytes );         [-2, +1|2, c]
+                                                --写入指定内存位置指定长度数据
+                                                --无论指定内存位置是否有效都无异常抛出
+                                                --写失败返回false, 错误消息
+    unsigned char*
+              newmem          ( size_t size );                              [-1, +1, c]
+                                                --指定字节大小，申请内存
+                                                --成功则返回内存指针
+                                                --size == 0或失败则返回nullptr
+    bool      deletemem       ( unsigned char* lpmem );                     [-1, +1, c]
+                                                --释放由newmem申请的内存
     
     --以下函数需要5.3及以上的string.unpack支持。低版本请自行修改源码添加之
-    int       mkb             ( void* lpmem );  --读取有符号byte值，小端  [-1, +1, c|e]
-    int       mkB             ( void* lpmem );  --读取无符号byte值，小端  [-1, +1, c|e]
-    int       mkbb            ( void* lpmem );  --读取有符号byte值，大端  [-1, +1, c|e]
-    int       mkBB            ( void* lpmem );  --读取无符号byte值，大端  [-1, +1, c|e]
+    int|bool [, string]
+              mkb             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号byte值，小端
+    int|bool [, string]
+              mkB             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号byte值，小端
+    int|bool [, string]
+              mkbb            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号byte值，大端
+    int|bool [, string]
+              mkBB            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号byte值，大端
 
-    int       mkw             ( void* lpmem );  --读取有符号word值，小端  [-1, +1, c|e]
-    int       mkW             ( void* lpmem );  --读取无符号word值，小端  [-1, +1, c|e]
-    int       mkww            ( void* lpmem );  --读取有符号word值，大端  [-1, +1, c|e]
-    int       mkWW            ( void* lpmem );  --读取无符号word值，大端  [-1, +1, c|e]
+    int|bool [, string]
+              mkw             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号word值，小端
+    int|bool [, string]
+              mkW             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号word值，小端
+    int|bool [, string]
+              mkww            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号word值，大端
+    int|bool [, string]
+              mkWW            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号word值，大端
+                                                
+    int|bool [, string]
+              mkd             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号dword值，小端
+    int|bool [, string]
+              mkD             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号dword值，小端
+    int|bool [, string]
+              mkdd            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号dword值，大端
+    int|bool [, string]
+              mkDD            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号dword值，大端
     
-    int       mkd             ( void* lpmem );  --读取有符号dword值，小端 [-1, +1, c|e]
-    int       mkD             ( void* lpmem );  --读取无符号dword值，小端 [-1, +1, c|e]
-    int       mkdd            ( void* lpmem );  --读取有符号dword值，大端 [-1, +1, c|e]
-    int       mkDD            ( void* lpmem );  --读取无符号dword值，大端 [-1, +1, c|e]
+    int|bool [, string]
+              mkq             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号qword值，小端
+    int|bool [, string]
+              mkQ             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号qword值，小端
+    int|bool [, string]
+              mkqq            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写有符号qword值，大端
+    int|bool [, string]
+              mkQQ            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写无符号qword值，大端
     
-    float     mkf             ( void* lpmem );  --读取float值，小端       [-1, +1, c|e]
-    double    mkF             ( void* lpmem );  --读取double值，小端      [-1, +1, c|e]
-    float     mkff            ( void* lpmem );  --读取float值，大端       [-1, +1, c|e]
-    double    mkFF            ( void* lpmem );  --读取double值，大端      [-1, +1, c|e]
+    float|bool [, string]
+              mkf             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写float值，小端
+    double|bool [, string]
+              mkF             ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写double值，小端
+    float|bool [, string]
+              mkff            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写float值，大端
+    double|bool [, string]
+              mkFF            ( void* lpmem [, int value] );          [-1|2, +1|2, c|e]
+                                                --读/写double值，大端
+                                                
+    int       bswap           ( int value [, int size] );                 [-1|2, +1, c]
+                                                --指定翻转数据
+    int       bswap_byte      ( int value );                                [-1, +1, c]
+    int       bswap_word      ( int value );                                [-1, +1, c]
+    int       bswap_dword     ( int value );                                [-1, +1, c]
+    int       bswap_qword     ( int value );                                [-1, +1, c]
 ]=======]
 if string.unpack then
 
-function mkb( lp )
-  return string.unpack("<i1", readmem(lp, 1));
+local function mkX( net, sign, size, lp, value )
+  local fmt;
+  if net then
+    fmt = ">";
+  else
+    fmt = "<";
+  end
+  if sign then
+    fmt = fmt .. "i";
+  else
+    fmt = fmt .. "i";
+  end
+  fmt = fmt .. size;
+  
+  if not value then
+    return string.unpack( fmt, readmem( lp, size ) );
+  end
+  value = string.pack( fmt, value );
+  return writemem( lp, value );
 end
 
-function mkB( lp )
-  return string.unpack("<I1", readmem(lp, 1));
+function mkb( lp, value )
+  return mkX( false, true, 1, lp, value );
 end
 
-function mkbb( lp )
-  return string.unpack(">i1", readmem(lp, 1));
+function mkB( lp, value )
+  return mkX( false, false, 1, lp, value );
 end
 
-function mkBB( lp )
-  return string.unpack(">I1", readmem(lp, 1));
+function mkbb( lp, value )
+  return mkX( true, true, 1, lp, value );
 end
 
-function mkw( lp )
-  return string.unpack("<i2", readmem(lp, 2));
+function mkBB( lp, value )
+  return mkX( true, false, 1, lp, value );
 end
 
-function mkW( lp )
-  return string.unpack("<I2", readmem(lp, 2));
+function mkw( lp, value )
+  return mkX( false, true, 2, lp, value );
 end
 
-function mkww( lp )
-  return string.unpack(">i2", readmem(lp, 2));
+function mkW( lp, value )
+  return mkX( false, false, 2, lp, value );
 end
 
-function mkWW( lp )
-  return string.unpack(">I2", readmem(lp, 2));
+function mkww( lp, value )
+  return mkX( true, true, 2, lp, value );
 end
 
-function mkd( lp )
-  return string.unpack("<i4", readmem(lp, 4));
+function mkWW( lp, value )
+  return mkX( true, false, 2, lp, value );
 end
 
-function mkD( lp )
-  return string.unpack("<I4", readmem(lp, 4));
+function mkd( lp, value )
+  return mkX( false, true, 4, lp, value );
 end
 
-function mkdd( lp )
-  return string.unpack(">i4", readmem(lp, 4));
+function mkD( lp, value )
+  return mkX( false, false, 4, lp, value );
 end
 
-function mkDD( lp )
-  return string.unpack(">I4", readmem(lp, 4));
+function mkdd( lp, value )
+  return mkX( true, true, 4, lp, value );
 end
 
-function mkf( lp )
-  return string.unpack("<f", readmem(lp, string.packsize("<f")));
+function mkDD( lp, value )
+  return mkX( true, false, 4, lp, value );
 end
 
-function mkF( lp )
-  return string.unpack("<d", readmem(lp, string.packsize("<d")));
+function mkq( lp, value )
+  return mkX( false, true, 8, lp, value );
 end
 
-function mkff( lp )
-  return string.unpack(">f", readmem(lp, string.packsize(">f")));
+function mkQ( lp, value )
+  return mkX( false, false, 8, lp, value );
 end
 
-function mkFF( lp )
-  return string.unpack(">d", readmem(lp, string.packsize(">d")));
+function mkqq( lp, value )
+  return mkX( true, true, 8, lp, value );
 end
+
+function mkQQ( lp, value )
+  return mkX( true, false, 8, lp, value );
+end
+
+function mkf( lp, value )
+  if not value then
+    return string.unpack( "<f", readmem( lp, string.packsize( "<f" ) ) );
+  end
+  value = string.pack( "<f", value );
+  return writemem( lp, value );
+end
+
+function mkF( lp, value )
+  if not value then
+    return string.unpack( "<d", readmem( lp, string.packsize( "<d" ) ) );
+  end
+  value = string.pack( "<d", value );
+  return writemem( lp, value );
+end
+
+function mkff( lp, value )
+  if not value then
+    return string.unpack( ">f", readmem( lp, string.packsize( ">f" ) ) );
+  end
+  value = string.pack( ">f", value );
+  return writemem( lp, value );
+end
+
+function mkFF( lp, value )
+  if not value then
+    return string.unpack( ">d", readmem( lp, string.packsize( ">d" ) ) );
+  end
+  value = string.pack( ">d", value );
+  return writemem( lp, value );
+end
+
+
+function bswap( value, size )
+  local fmt = "=I";
+  if size then
+    fmt = fmt .. size;
+  end
+  local ss = string.pack( fmt, value ):reverse();
+  return (string.unpack( fmt, ss ));
+end
+
+function bswap_byte( value )      return value;             end
+function bswap_word( value )      return bswap( value, 2 ); end
+function bswap_dword( value )     return bswap( value, 4 ); end
+function bswap_qword( value )     return bswap( value, 8 ); end
 
 end

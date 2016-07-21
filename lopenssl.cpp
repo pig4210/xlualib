@@ -369,67 +369,6 @@ static int LUA_C_rsa_private_decrypt(lua_State* ls)
   lua_pushlstring(ls, res.c_str(), res.size());
   return 1;
   }
-//////////////////////////////////////////////////////////////////////////
-static int LUA_C_des_encrypt(lua_State* ls)
-  {
-  size_t l = 0;
-  const auto s = luaL_checklstring(ls, 1, &l);
-  string data(s, l);
-
-  DES_key_schedule ks;
-  DES_set_key_unchecked((const_DES_cblock*)luaL_checkstring(ls, 2), &ks);
-
-  const char ch = 8 - (data.size() % 8);
-  data.append((size_t)ch, ch);
-
-  const char* lp = data.c_str();
-  for(size_t i = 0; i < data.size(); i += sizeof(DES_cblock))
-    {
-    DES_ecb_encrypt((const_DES_cblock*)&lp[i], (DES_cblock*)&lp[i], &ks, DES_ENCRYPT);
-    }
-
-  lua_pushlstring(ls, data.c_str(), data.size());
-  return 1;
-  }
-
-static int LUA_C_des_decrypt(lua_State* ls)
-  {
-  size_t l = 0;
-  const auto s = luaL_checklstring(ls, 1, &l);
-  string data(s, l);
-
-  DES_key_schedule ks;
-  DES_set_key_unchecked((const_DES_cblock*)luaL_checkstring(ls, 2), &ks);
-  if(data.size() % 8 != 0)
-    {
-    lua_pushstring(ls, "DES解密串应该是8的倍长");
-    return lua_error(ls);
-    }
-
-  const char* lp = data.c_str();
-  for(size_t i = 0; i < data.size(); i += sizeof(DES_cblock))
-    {
-    DES_ecb_encrypt((const_DES_cblock*)&lp[i], (DES_cblock*)&lp[i], &ks, DES_DECRYPT);
-    }
-
-  const unsigned char ch = *data.rbegin();
-
-  if(ch <= sizeof(DES_cblock))
-    {
-    bool ispadding = true;
-    for(auto it = data.rbegin(); it != (data.rbegin() + ch); ++it)
-      {
-      if(*it != ch)
-        {
-        ispadding = false;
-        break;
-        }
-      }
-    if(ispadding) data.resize(data.size() - ch);
-    }
-  lua_pushlstring(ls, data.c_str(), data.size());
-  return 1;
-  }
 
 //////////////////////////////////////////////////////////////////////////
 static int LUA_C_base64_encode(lua_State* ls)
@@ -599,8 +538,6 @@ static int LUA_C_sha(lua_State* ls)
   return 1;
   }
 
-
-
 //////////////////////////////////////////////////////////////////////////
 void register_openssl(lua_State* ls)
   {
@@ -630,10 +567,6 @@ void register_openssl(lua_State* ls)
 
   lua_register(ls, "rsa_public_decrypt", LUA_C_rsa_public_decrypt);
   lua_register(ls, "rsa_private_decrypt", LUA_C_rsa_private_decrypt);
-
-
-  lua_register(ls, "des_encrypt", LUA_C_des_encrypt);
-  lua_register(ls, "des_decrypt", LUA_C_des_decrypt);
 
   lua_register(ls, "base64_encode", LUA_C_base64_encode);
   lua_register(ls, "base64_decode", LUA_C_base64_decode);

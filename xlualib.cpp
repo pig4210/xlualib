@@ -54,18 +54,17 @@ int luaopen_xlualib(lua_State* ls)
   register_winapi(ls);
   register_xlog(ls);
   register_mkmem(ls);
-  register_s_ws(ls);
   register_zlib(ls);
   register_openssl(ls);
   register_des(ls);
   register_aes(ls);
   register_algorithm(ls);
   register_hex_str(ls);
-  register_utf8(ls);
   register_sock(ls);
   register_serialcomm(ls);
   register_xhttp(ls);
   register_blowfish(ls);
+  register_pe(ls);
 
   load_my_lua(ls);
   return 0;

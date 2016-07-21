@@ -64,16 +64,6 @@ string.rsa_prv_enc    = function( ... ) return rsa_private_encrypt         ( ...
 string.rsa_prv_dec    = function( ... ) return rsa_private_decrypt         ( ... ); end
 
 --[=======[
-    string    des_encrypt               ( string data, string key );        [-2, +1, c]
-    string    des_decrypt               ( string data, string key );      [-2, +1, c|v]
-    
-    string    string:des_enc            ( string key );                     [-1, +1, c]
-    string    string:des_dec            ( string key );                   [-1, +1, c|v]
-]=======]
-string.des_enc        = function( ... ) return des_encrypt                 ( ... ); end
-string.des_dec        = function( ... ) return des_decrypt                 ( ... ); end
-
---[=======[
     string    base64_encode             (
                                         string    data
                                         [,
