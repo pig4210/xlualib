@@ -102,6 +102,58 @@ static int LUA_C_deletemem(lua_State* ls)
   return 1;
   }
 
+
+static int LUA_C_hook(lua_State* ls)
+  {
+  if(lua_gettop(ls) == 0)
+    {
+    if(!HookClear())
+      {
+      lua_pushstring(ls, (xmsg() << "UnHookÊ§°Ü : " << (intptr_t)GetLastHookErr()).c_str());
+      return lua_error(ls);
+      }
+    return 0;
+    }
+
+  if(lua_gettop(ls) == 1)
+    {
+    HookNode* node = (HookNode*)luaL_checkinteger(ls, 1);
+    if(!UnHook(node, false))
+      {
+      lua_pushstring(ls, (xmsg() << "UnHookÊ§°Ü : " << (intptr_t)GetLastHookErr()).c_str());
+      return lua_error(ls);
+      }
+    return 0;
+    }
+
+  void* hookmem = (void*)luaL_checkinteger(ls, 1);
+  HookNode* node = nullptr;
+
+  if(lua_isinteger(ls, 2))
+    {
+    const size_t hooksize = luaL_checkinteger(ls, 2);
+    const char* data_descibe = luaL_checkstring(ls, 3);
+    const char* len_descibe = luaL_checkstring(ls, 4);
+    const bool docodeend = lua_toboolean(ls, 5);
+    node = Hook2Log(hookmem, hooksize, data_descibe, len_descibe, docodeend);
+    }
+  else
+    {
+    const char* data_descibe = luaL_checkstring(ls, 2);
+    const char* len_descibe = luaL_checkstring(ls, 3);
+    const bool calltable_offset = lua_toboolean(ls, 4);
+    const bool docallend = lua_toboolean(ls, 5);
+    node = Hook2Log(hookmem, data_descibe, len_descibe, calltable_offset, docallend);
+    }
+  if(node == nullptr)
+    {
+    lua_pushstring(ls, (xmsg() << "HookÊ§°Ü : " << (intptr_t)GetLastHookErr()).c_str());
+    return lua_error(ls);
+    }
+  lua_pushinteger(ls, (size_t)node);
+  return 1;
+  }
+
 void register_mkmem(lua_State* ls)
   {
   lua_pop(ls, lua_gettop(ls));
@@ -110,6 +162,8 @@ void register_mkmem(lua_State* ls)
   lua_register(ls, "writemem", LUA_C_writemem);
   lua_register(ls, "newmem", LUA_C_newmem);
   lua_register(ls, "deletemem", LUA_C_deletemem);
+
+  lua_register(ls, "hook", LUA_C_hook);
 
   lua_pop(ls, lua_gettop(ls));
   }

@@ -12,7 +12,7 @@ static const char* gk_rsakey = "RsaKey*";
 
 struct RSAKEY_ST
   {
-  RSA*    key;
+  RSA*    key;        //因为key资源需要回收，所以不能做成lightuserdata
   };
 
 static int LUA_C_rsa_key_gc(lua_State* ls)
@@ -38,8 +38,21 @@ static int LUA_C_rsa_key_tostring(lua_State* ls)
   return 1;
   }
 
-static int rsa_open_public_key(lua_State* ls, FILE* keyfile)
+static int LUA_C_rsa_open_public_key(lua_State* ls)
   {
+  const char* filename = luaL_checkstring(ls, 1);
+
+  FILE* keyfile = nullptr;
+  errno_t en = fopen_s(&keyfile, filename, "r");
+  if(0 != en)
+    {
+    lua_pushstring(ls,
+                   (
+                   xmsg() << "打开RSA Public Key[" << filename << "]失败 : " << en
+                   ).c_str());
+    return lua_error(ls);
+    }
+
   RSA* k = PEM_read_RSA_PUBKEY(keyfile, nullptr, nullptr, nullptr);
 
   if(k == nullptr)
@@ -69,23 +82,6 @@ static int rsa_open_public_key(lua_State* ls, FILE* keyfile)
   return 1;
   }
 
-static int LUA_C_rsa_open_public_key(lua_State* ls)
-  {
-  const char* filename = luaL_checkstring(ls, 1);
-
-  FILE* keyfile = nullptr;
-  errno_t en = fopen_s(&keyfile, filename, "r");
-  if(0 != en)
-    {
-    lua_pushstring(ls,
-                   (
-                   xmsg() << "打开RSA Public Key[" << filename << "]失败 : " << en
-                   ).c_str());
-    return lua_error(ls);
-    }
-  return rsa_open_public_key(ls, keyfile);
-  }
-
 static int LUA_C_rsa_set_public_key(lua_State* ls)
   {
   size_t l = 0;
@@ -96,39 +92,43 @@ static int LUA_C_rsa_set_public_key(lua_State* ls)
     return lua_error(ls);
     }
 
-  FILE* keyfile = nullptr;
-  errno_t en = tmpfile_s(&keyfile);
-  if(0 != en)
+  auto bio = BIO_new_mem_buf(s, l);
+  if(bio == nullptr)
     {
-    lua_pushstring(ls, (xmsg() << "建立Rsa Public Key文件失败 : " << en).c_str());
+    lua_pushstring(ls, "建立Rsa Public Key缓存失败");
     return lua_error(ls);
     }
 
-  if(1 != fwrite(s, l, 1, keyfile))
+  RSA* k = PEM_read_bio_RSA_PUBKEY(bio, nullptr, nullptr, nullptr);
+  BIO_free_all(bio);
+  if(k == nullptr)
     {
-    fclose(keyfile);
-    lua_pushstring(ls, (xmsg() << "写入Rsa Public Key文件失败 : " << errno).c_str());
+    lua_pushstring(ls, "读取Rsa Public Key缓存失败");
     return lua_error(ls);
     }
 
-  if(0 != fflush(keyfile))
-    {
-    fclose(keyfile);
-    lua_pushstring(ls, (xmsg() << "刷新Rsa Public Key文件失败 : " << errno).c_str());
-    return lua_error(ls);
-    }
+  RSAKEY_ST* st = (RSAKEY_ST*)lua_newuserdata(ls, sizeof(*st));
+  st->key = k;
 
-  if(0 != fseek(keyfile, 0, SEEK_SET))
-    {
-    fclose(keyfile);
-    lua_pushstring(ls, (xmsg() << "设置Rsa Public Key文件失败 : " << errno).c_str());
-    return lua_error(ls);
-    }
-  return rsa_open_public_key(ls, keyfile);
+  luaL_setmetatable(ls, gk_rsakey);
+  return 1;
   }
 
-static int rsa_open_private_key(lua_State* ls, FILE* keyfile)
+static int LUA_C_rsa_open_private_key(lua_State* ls)
   {
+  const char* filename = luaL_checkstring(ls, 1);
+
+  FILE* keyfile = nullptr;
+  errno_t en = fopen_s(&keyfile, filename, "r");
+  if(0 != en)
+    {
+    lua_pushstring(ls,
+                   (
+                   xmsg() << "打开Rsa Private Key[" << filename << "]失败 : " << en
+                   ).c_str());
+    return lua_error(ls);
+    }
+
   RSA* k = PEM_read_RSAPrivateKey(keyfile, nullptr, nullptr, nullptr);
 
   if(k == nullptr)
@@ -158,23 +158,6 @@ static int rsa_open_private_key(lua_State* ls, FILE* keyfile)
   return 1;
   }
 
-static int LUA_C_rsa_open_private_key(lua_State* ls)
-  {
-  const char* filename = luaL_checkstring(ls, 1);
-
-  FILE* keyfile = nullptr;
-  errno_t en = fopen_s(&keyfile, filename, "r");
-  if(0 != en)
-    {
-    lua_pushstring(ls,
-                   (
-                   xmsg() << "打开Rsa Private Key[" << filename << "]失败 : " << en
-                   ).c_str());
-    return lua_error(ls);
-    }
-  return rsa_open_private_key(ls, keyfile);
-  }
-
 static int LUA_C_rsa_set_private_key(lua_State* ls)
   {
   size_t l = 0;
@@ -185,35 +168,27 @@ static int LUA_C_rsa_set_private_key(lua_State* ls)
     return lua_error(ls);
     }
 
-  FILE* keyfile = nullptr;
-  errno_t en = tmpfile_s(&keyfile);
-  if(0 != en)
+
+  auto bio = BIO_new_mem_buf(s, l);
+  if(bio == nullptr)
     {
-    lua_pushstring(ls, (xmsg() << "建立Rsa Private Key文件失败 : " << en).c_str());
+    lua_pushstring(ls, "建立Rsa Private Key缓存失败");
     return lua_error(ls);
     }
 
-  if(1 != fwrite(s, l, 1, keyfile))
+  RSA* k = PEM_read_bio_RSAPrivateKey(bio, nullptr, nullptr, nullptr);
+  BIO_free_all(bio);
+  if(k == nullptr)
     {
-    fclose(keyfile);
-    lua_pushstring(ls, (xmsg() << "写入Rsa Private Key文件失败 : " << errno).c_str());
+    lua_pushstring(ls, "读取Rsa Private Key缓存失败");
     return lua_error(ls);
     }
 
-  if(0 != fflush(keyfile))
-    {
-    fclose(keyfile);
-    lua_pushstring(ls, (xmsg() << "刷新Rsa Private Key文件失败 : " << errno).c_str());
-    return lua_error(ls);
-    }
+  RSAKEY_ST* st = (RSAKEY_ST*)lua_newuserdata(ls, sizeof(*st));
+  st->key = k;
 
-  if(0 != fseek(keyfile, 0, SEEK_SET))
-    {
-    fclose(keyfile);
-    lua_pushstring(ls, (xmsg() << "设置Rsa Private Key文件失败 : " << errno).c_str());
-    return lua_error(ls);
-    }
-  return rsa_open_private_key(ls, keyfile);
+  luaL_setmetatable(ls, gk_rsakey);
+  return 1;
   }
 
 static int LUA_C_rsa_public_encrypt(lua_State* ls)

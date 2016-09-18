@@ -232,3 +232,28 @@ function bswap_dword( value )     return bswap( value, 4 ); end
 function bswap_qword( value )     return bswap( value, 8 ); end
 
 end
+
+
+--[=======[
+●
+    void*     hook            (
+                              void*     hookmem,
+                              int       hooksize,
+                              string    data_descibe,
+                              string    len_descibe,
+                              bool      docodeend
+                              );                                        [-5, +1, c|e|v]
+        --Hook2Log 地址
+    void*     hook            (
+                              void*     hookmem,
+                              string    data_descibe,
+                              string    len_descibe,
+                              bool      calltable_offset,
+                              bool      docallend
+                              );                                        [-5, +1, c|e|v]
+        --Hook2Log 偏移或跳转表
+
+    void      unhook          ( void*   node );                         [-1, +0, c|e|v]
+        --当unhook不给node参数时，卸载全部hook
+]=======]
+function unhook( ... )          return hook( ... ); end
