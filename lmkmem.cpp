@@ -129,7 +129,7 @@ static int LUA_C_hook(lua_State* ls)
   void* hookmem = (void*)luaL_checkinteger(ls, 1);
   HookNode* node = nullptr;
 
-  if(lua_isinteger(ls, 2))
+  if(lua_isnumber(ls, 2))
     {
     const size_t hooksize = luaL_checkinteger(ls, 2);
     const char* data_descibe = luaL_checkstring(ls, 3);
