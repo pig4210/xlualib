@@ -49,7 +49,7 @@
 
                               
     string.hexs = string.str2hexs;
-    string.shwo = string.hex2show;
+    string.show = string.hex2show;
 ]=======]
 string.str2hexs       = function( ... ) return str2hexs                    ( ... ); end
 string.hex2show       = function( ... ) return hex2show                    ( ... ); end

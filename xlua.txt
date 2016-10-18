@@ -1,4 +1,4 @@
-xlua版本 4.1
+xlua版本 4.2
 
 
 -------- -------- -------- --------
@@ -528,7 +528,7 @@ DES解密：不对齐部分不解密，忽略之
 
                               
     string.hexs = string.str2hexs;
-    string.shwo = string.hex2show;
+    string.show = string.hex2show;
 
 
 
@@ -557,6 +557,8 @@ DES解密：不对齐部分不解密，忽略之
 -------- -------- -------- --------
             mem操作
 -------- -------- -------- --------
+
+所有指针以interger形式传输，而不是采用light userdata形式，是考虑指针运算，格式化输出等便利
 
 
 

@@ -86,6 +86,9 @@ end
 function xline:get_dword()
   return self:pick("L");
 end
+function xline:get_qword()
+  return self:pick("I8");
+end
 
 --[=======[
     int head_size, int real_size
@@ -225,6 +228,9 @@ end
 function xline:set_dword( v )
   return self:push("L", v);
 end
+function xline:set_qword( v )
+  return self:push("I8", v);
+end
 --[=======[
     xline     xline:set_head            ( int size );                       [-1, +1, c]
         --写入数据头，自动根据状态加入数据头大小
@@ -319,6 +325,7 @@ end
 xline.gb    = xline.get_byte;
 xline.gw    = xline.get_word;
 xline.gd    = xline.get_dword;
+xline.gq    = xline.get_qword;
 xline.gh    = xline.get_head;
 xline.gl    = xline.get_line;
 xline.ghl   = xline.get_head_line;
@@ -334,6 +341,7 @@ xline.as    = xline.assign;
 xline.sb    = xline.set_byte;
 xline.sw    = xline.set_word;
 xline.sd    = xline.set_dword;
+xline.sq    = xline.set_qword;
 xline.sh    = xline.set_head;
 xline.sl    = xline.set_line;
 xline.shl   = xline.set_head_line;

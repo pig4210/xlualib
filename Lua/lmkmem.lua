@@ -2,6 +2,8 @@
 -------- -------- -------- --------
             mem操作
 -------- -------- -------- --------
+
+所有指针以interger形式传输，而不是采用light userdata形式，是考虑指针运算，格式化输出等便利
 ]=======]
 
 --[=======[
@@ -109,7 +111,7 @@ local function mkX( net, sign, size, lp, value )
   if sign then
     fmt = fmt .. "i";
   else
-    fmt = fmt .. "i";
+    fmt = fmt .. "I";
   end
   fmt = fmt .. size;
   
