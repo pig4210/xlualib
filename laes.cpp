@@ -1,10 +1,14 @@
+#include <string>
+
 #include "xlualib.h"
 
 #include <openssl/aes.h>
 
 #pragma comment(lib, "libeay32")
 
-static void pkcs7padding(string& data, const int block_size, const bool padding)
+using std::string;
+
+void pkcs7padding(string& data, const int block_size, const bool padding)
   {
   if(padding)
     {
@@ -180,7 +184,7 @@ static int LUA_C_aes_cbc_decrypt(lua_State* ls)
   }
 
 //////////////////////////////////////////////////////////////////////////
-void register_aes(lua_State* ls)
+ADD_XLUALIB_REGISTER(aes)
   {
   lua_pop(ls, lua_gettop(ls));
 

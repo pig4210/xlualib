@@ -1,4 +1,8 @@
+#include <string>
+
 #include "xlualib.h"
+
+using std::string;
 
 static void load_my_lua(lua_State* ls)
   {
@@ -45,26 +49,34 @@ static void load_my_lua(lua_State* ls)
   lua_pop(ls, lua_gettop(ls));
   }
 
+
+#include <map>
+
+using std::map;
+
+//! 做成函数即保证初始化，也保证内部访问
+static map<string, xlualib_register_routine>& routines()
+  {
+  static map<string, xlualib_register_routine> xlualib_register_routines;
+  return xlualib_register_routines;
+  }
+
+bool Add_XLUALIB_REGISTER_ROUTINE(const char* const name, xlualib_register_routine func)
+  {
+  routines()[name] = func;
+  return name != nullptr;
+  }
+
 extern "C"
 #ifndef XLUALIB_INSIDE
 __declspec(dllexport)
 #endif
 int luaopen_xlualib(lua_State* ls)
   {
-  register_winapi(ls);
-  register_xlog(ls);
-  register_mkmem(ls);
-  register_zlib(ls);
-  register_openssl(ls);
-  register_des(ls);
-  register_aes(ls);
-  register_algorithm(ls);
-  register_hex_str(ls);
-  register_sock(ls);
-  register_serialcomm(ls);
-  register_xhttp(ls);
-  register_blowfish(ls);
-  register_pe(ls);
+  for(const auto& r : routines())
+    {
+    r.second(ls);
+    }
 
   load_my_lua(ls);
   return 0;

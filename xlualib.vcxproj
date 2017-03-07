@@ -128,20 +128,6 @@
     <ClCompile Include="xlualib.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="laes.h" />
-    <ClInclude Include="lalgorithm.h" />
-    <ClInclude Include="lblowfish.h" />
-    <ClInclude Include="ldes.h" />
-    <ClInclude Include="lpe.h" />
-    <ClInclude Include="lwinapi.h" />
-    <ClInclude Include="lhex_str.h" />
-    <ClInclude Include="lmkmem.h" />
-    <ClInclude Include="lopenssl.h" />
-    <ClInclude Include="lserialcomm.h" />
-    <ClInclude Include="lsock.h" />
-    <ClInclude Include="lxhttp.h" />
-    <ClInclude Include="lxlog.h" />
-    <ClInclude Include="lzlib.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="xlualib.h" />
   </ItemGroup>

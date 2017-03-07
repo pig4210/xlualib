@@ -38,8 +38,7 @@ BLOWFISH解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 16
+                                        string ivec = "\0\0\0\0\0\0\0\0"
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    blowfish.cbc.p7enc        ( ... );                      [-2|3|4, +1, c|v]

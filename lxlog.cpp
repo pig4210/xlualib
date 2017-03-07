@@ -26,7 +26,7 @@ static int LUA_C_xlog(lua_State* ls)
   return 0;
   }
 
-void register_xlog(lua_State* ls)
+ADD_XLUALIB_REGISTER(xlog)
   {
   lua_pop(ls, lua_gettop(ls));
 

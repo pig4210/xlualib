@@ -1,9 +1,12 @@
+#include <string>
 #include "xlualib.h"
 
 #define ZLIB_WINAPI
 #include <zlib.h>
 #pragma comment(lib, "zlib")
 #pragma comment(linker, "/NODEFAULTLIB:msvcrt.lib")
+
+using std::string;
 
 static int LUA_C_zlib_compress(lua_State* ls)
   {
@@ -200,7 +203,7 @@ static int LUA_C_gzip_uncompress(lua_State* ls)
     }
   }
 
-void register_zlib(lua_State* ls)
+ADD_XLUALIB_REGISTER(zlib)
   {
   lua_pop(ls, lua_gettop(ls));
 

@@ -5,7 +5,14 @@
 #pragma comment(lib, "curl")
 
 #include <map>
+#include <vector>
 #include <regex>
+
+using std::string;
+using std::map;
+using std::regex;
+using std::smatch;
+using std::vector;
 
 //////////////////////////////////////////////////////////////////////////
 static size_t xhttp_header_callback(void* ptr, size_t size, size_t nmemb, void* stream)
@@ -198,7 +205,7 @@ static int LUA_C_xhttp(lua_State* ls)
   }
 
 //////////////////////////////////////////////////////////////////////////
-void register_xhttp(lua_State* ls)
+ADD_XLUALIB_REGISTER(xhttp)
   {
   lua_pop(ls, lua_gettop(ls));
 

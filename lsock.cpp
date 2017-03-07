@@ -1,4 +1,10 @@
+#include <string>
+#include <stdexcept>
+
 #include "xlualib.h"
+
+using std::string;
+using std::runtime_error;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -667,6 +673,27 @@ static int LUA_C_tcp_accept(lua_State* ls)
   return 1;
   }
 
+static int LUA_C_tcp_check(lua_State* ls)
+  {
+  SOCKET_ST* st = (SOCKET_ST*)luaL_checkudata(ls, 1, gk_tcp_register);
+
+  timeval t;
+  t.tv_sec = 0;
+  t.tv_usec = 1;
+
+  fd_set fd;
+  FD_ZERO(&fd);
+  FD_SET(st->sock, &fd);
+  if(0 < select(0, nullptr, &fd, nullptr, &t))
+    {
+    u_long ul = 0;
+    ioctlsocket(st->sock, FIONBIO, &ul);
+    lua_pushboolean(ls, true);
+    return 1;
+    }
+  lua_pushboolean(ls, false);
+  return 1;
+  }
 
 static const luaL_Reg gkTCPLib[] =
   {
@@ -681,6 +708,7 @@ static const luaL_Reg gkTCPLib[] =
     { "send",         LUA_C_tcp_send },
     { "recv",         LUA_C_tcp_recv },
     { "accept",       LUA_C_tcp_accept },
+    { "check",        LUA_C_tcp_check },
     { nullptr, nullptr }
   };
 
@@ -711,7 +739,8 @@ static int LUA_C_tcp_new(lua_State* ls)
   auto ip = luaL_optstring(ls, 1, "0.0.0.0");
   auto port = luaL_optstring(ls, 2, "0");
 
-  auto bind_port = luaL_optinteger(ls, 3, 0);
+  const auto bind_port = luaL_optinteger(ls, 3, 0);
+  const bool NonBlockConnect = lua_toboolean(ls, 4);
 
   try
     {
@@ -748,15 +777,25 @@ static int LUA_C_tcp_new(lua_State* ls)
         lua_pushstring(ls, "tcp socket 请明确指定连接的地址、端口");
         return lua_error(ls);
         }
-      if(connect(sock, (sockaddr*)&addr, sizeof(addr)))
+      //如果指定了非阻塞连接，就设置SOCK的非阻塞
+      if(NonBlockConnect)
         {
-        shutdown(sock, SD_BOTH);
-        closesocket(sock);
-        xmsg msg;
-        msg << "tcp socket连接[" << IpString(addr)
-          << "]失败:" << (intptr_t)WSAGetLastError();
-        lua_pushstring(ls, msg.c_str());
-        return lua_error(ls);
+        u_long ul = 1;
+        ioctlsocket(sock, FIONBIO, &ul);
+        connect(sock, (sockaddr*)&addr, sizeof(addr));
+        }
+      else
+        {
+        if(connect(sock, (sockaddr*)&addr, sizeof(addr)))
+          {
+          shutdown(sock, SD_BOTH);
+          closesocket(sock);
+          xmsg msg;
+          msg << "tcp socket连接[" << IpString(addr)
+            << "]失败:" << (intptr_t)WSAGetLastError();
+          lua_pushstring(ls, msg.c_str());
+          return lua_error(ls);
+          }
         }
       }
 

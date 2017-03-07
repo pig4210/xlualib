@@ -1,4 +1,8 @@
+#include <string>
+
 #include "xlualib.h"
+
+using std::string;
 
 static int LUA_C_SerialCommGets(lua_State* ls)
   {
@@ -393,7 +397,7 @@ static int LUA_C_SerialCommOpen(lua_State* ls)
   return 1;
   }
 
-void register_serialcomm(lua_State* ls)
+ADD_XLUALIB_REGISTER(serialcomm)
   {
   lua_pop(ls, lua_gettop(ls));
 

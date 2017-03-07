@@ -65,8 +65,9 @@
     TCP       tcp_new         (
                               string|uint         ip    = "0.0.0.0"
                               string|uint         port  = "0",
-                              string|uint         bind_port = "0"
-                              );                                          [-3, +1, c|v]
+                              string|uint         bind_port = "0",
+                              bool                NonBlockConnect = false
+                              );                                          [-4, +1, c|v]
         
     string ip, string port, uint ip, uint port
               TCP:getsockname ( );                                          [-0, +1, c]
@@ -101,4 +102,6 @@
         --当提供timeout(毫秒计)时，阻塞指定时间，直到连接发生或超时返回
         --连接发生时，返回新连接的TCP对象
         --超时返回nil, "timeout"
+    bool      TCP:check       ( );                                          [-0, +1, c]
+        --检测NonBlockConnect的TCP是否连接成功（成功后，自动设置阻塞）
 ]=======]

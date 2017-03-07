@@ -1,36 +1,16 @@
+#include <string>
+
 #include "xlualib.h"
 
 #include <openssl/blowfish.h>
 
 #pragma comment(lib, "libeay32")
 
+using std::string;
+
 static const int blowfish_block_size = 8;
 
-static void pkcs7padding(string& data, const int block_size, const bool padding)
-  {
-  if(padding)
-    {
-    const char ch = block_size - (data.size() % block_size);
-    data.append((size_t)ch, ch);
-    return;
-    }
-  if(data.empty())  return;
-  const unsigned char ch = *data.rbegin();
-
-  if(ch <= block_size)
-    {
-    bool ispadding = true;
-    for(auto it = data.rbegin(); it != (data.rbegin() + ch); ++it)
-      {
-      if(*it != ch)
-        {
-        ispadding = false;
-        break;
-        }
-      }
-    if(ispadding) data.resize(data.size() - ch);
-    }
-  }
+extern void pkcs7padding(string& data, const int block_size, const bool padding);
 
 static const string blowfish_data(lua_State* ls)
   {
@@ -160,7 +140,7 @@ static int LUA_C_blowfish_cbc_decrypt(lua_State* ls)
   }
 
 //////////////////////////////////////////////////////////////////////////
-void register_blowfish(lua_State* ls)
+ADD_XLUALIB_REGISTER(blowfish)
   {
   lua_pop(ls, lua_gettop(ls));
 

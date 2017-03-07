@@ -55,12 +55,9 @@ static int LUA_C_GetProcAddress(lua_State* ls)
   }
 
 
-void register_winapi(lua_State* ls)
+ADD_XLUALIB_REGISTER(winapi)
   {
   lua_pop(ls, lua_gettop(ls));
-
-  lua_register(ls, "sleep", LUA_C_Sleep);
-  lua_register(ls, "gettick", LUA_C_GetTickCount);
 
   lua_register(ls, "Sleep", LUA_C_Sleep);
   lua_register(ls, "GetTickCount", LUA_C_GetTickCount);

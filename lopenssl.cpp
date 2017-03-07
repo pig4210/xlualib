@@ -1,3 +1,5 @@
+#include <string>
+
 #include "xlualib.h"
 
 #include <openssl/rsa.h>
@@ -7,6 +9,8 @@
 #include <openssl/sha.h>
 
 #pragma comment(lib, "libeay32")
+
+using std::string;
 //////////////////////////////////////////////////////////////////////////
 static const char* gk_rsakey = "RsaKey*";
 
@@ -514,7 +518,7 @@ static int LUA_C_sha(lua_State* ls)
   }
 
 //////////////////////////////////////////////////////////////////////////
-void register_openssl(lua_State* ls)
+ADD_XLUALIB_REGISTER(openssl)
   {
   lua_pop(ls, lua_gettop(ls));
 

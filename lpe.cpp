@@ -90,7 +90,7 @@ static int LUA_C_PE(lua_State* ls)
   return 1;
   }
 
-void register_pe(lua_State* ls)
+ADD_XLUALIB_REGISTER(pe)
   {
   lua_pop(ls, lua_gettop(ls));
 

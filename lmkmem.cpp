@@ -102,7 +102,6 @@ static int LUA_C_deletemem(lua_State* ls)
   return 1;
   }
 
-
 static int LUA_C_hook(lua_State* ls)
   {
   if(lua_gettop(ls) == 0)
@@ -154,7 +153,7 @@ static int LUA_C_hook(lua_State* ls)
   return 1;
   }
 
-void register_mkmem(lua_State* ls)
+ADD_XLUALIB_REGISTER(mkmem)
   {
   lua_pop(ls, lua_gettop(ls));
 

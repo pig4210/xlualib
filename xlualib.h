@@ -8,19 +8,12 @@
 #pragma comment(lib, "lua")
 #endif
 
-using namespace std;
+typedef void(*xlualib_register_routine)(lua_State* ls);
 
-#include "lwinapi.h"
-#include "lxlog.h"
-#include "lmkmem.h"
-#include "lzlib.h"
-#include "lopenssl.h"
-#include "lalgorithm.h"
-#include "lhex_str.h"
-#include "lsock.h"
-#include "lserialcomm.h"
-#include "lxhttp.h"
-#include "ldes.h"
-#include "laes.h"
-#include "lblowfish.h"
-#include "lpe.h"
+bool Add_XLUALIB_REGISTER_ROUTINE(const char* const name, xlualib_register_routine func);
+
+
+#define ADD_XLUALIB_REGISTER(name) \
+                      static void register_##name(lua_State* ls);\
+                      static const bool breg = Add_XLUALIB_REGISTER_ROUTINE(#name, register_##name);\
+                      static void register_##name(lua_State* ls)

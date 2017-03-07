@@ -1,9 +1,13 @@
+#include <string>
+
 #include "xlualib.h"
+
+using std::string;
 
 //////////////////////////////////////////////////////////////////////////
 static int LUA_C_xrand(lua_State* ls)
   {
-  lua_pushinteger(ls, xrand((TULONG)luaL_optinteger(ls, 1, 0)));
+  lua_pushinteger(ls, xrand((size_t)luaL_optinteger(ls, 1, 0)));
   return 1;
   }
 //////////////////////////////////////////////////////////////////////////
@@ -58,6 +62,15 @@ static int LUA_C_crc64(lua_State* ls)
   const auto s = luaL_checklstring(ls, 1, &l);
 
   lua_pushinteger(ls, crc64(s, l));
+  return 1;
+  }
+
+static int LUA_C_crcccitt(lua_State* ls)
+  {
+  size_t l = 0;
+  const auto s = luaL_checklstring(ls, 1, &l);
+
+  lua_pushinteger(ls, crcccitt(s, l));
   return 1;
   }
 //////////////////////////////////////////////////////////////////////////
@@ -217,7 +230,7 @@ static int LUA_C_des_encrypt(lua_State* ls)
   size_t ll = 0;
   const auto key = luaL_checklstring(ls, 2, &ll);
 
-  const auto res(DesEncrypt(s, l, key));
+  const auto res(DesEncrypt(s, l, DesKey(key, ll)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -231,16 +244,15 @@ static int LUA_C_des_decrypt(lua_State* ls)
   size_t ll = 0;
   const auto key = luaL_checklstring(ls, 2, &ll);
 
-  const auto res(DesDecrypt(s, l, key));
+  const auto res(DesDecrypt(s, l, DesKey(key, ll)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
   }
 //////////////////////////////////////////////////////////////////////////
-void register_algorithm(lua_State* ls)
+ADD_XLUALIB_REGISTER(algorithm)
   {
   lua_pop(ls, lua_gettop(ls));
-
 
   lua_register(ls, "xrand", LUA_C_xrand);
 
@@ -248,11 +260,10 @@ void register_algorithm(lua_State* ls)
 
   lua_register(ls, "md5", LUA_C_md5);
 
-
   lua_register(ls, "crc16", LUA_C_crc16);
   lua_register(ls, "crc32", LUA_C_crc32);
   lua_register(ls, "crc64", LUA_C_crc64);
-
+  lua_register(ls, "crcccitt", LUA_C_crcccitt);
 
   lua_register(ls, "TeanEncrypt", LUA_C_TeanEncrypt);
   lua_register(ls, "TeanDecrypt", LUA_C_TeanDecrypt);
@@ -265,13 +276,11 @@ void register_algorithm(lua_State* ls)
   lua_register(ls, "XxTeaEncrypt", LUA_C_XxTeaEncrypt);
   lua_register(ls, "XxTeaDecrypt", LUA_C_XxTeaDecrypt);
 
-
   lua_register(ls, "aes_encrypt", LUA_C_aes_encrypt);
   lua_register(ls, "aes_decrypt", LUA_C_aes_decrypt);
 
   lua_register(ls, "des_encrypt", LUA_C_des_encrypt);
   lua_register(ls, "des_decrypt", LUA_C_des_decrypt);
-
 
   lua_pop(ls, lua_gettop(ls));
   }

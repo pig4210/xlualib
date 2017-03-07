@@ -16,11 +16,13 @@
     string    hex2show        (
                               string    data
                               [,
-                              int       prews         = 0,
-                              string    code          = "u"|"8"|"a",
-                              bool      isup          = true
+                              int       flag
                               ]
-                              );                                      [-1|2|3|4, +1, c]
+                              );                                          [-1|2, +1, c]
+      -- 为了简化参数，设计flag
+      -- flag >= 0x10的部分被当作prews参数
+      -- flag & 1 表示ASCII、flag & 2 表示Unicode、flag & 8 表示UTF8
+      -- flag & 4 表示isup == false
     string    hex2str         (
                               string    data
                               [,
@@ -36,11 +38,9 @@
                               );                                       [-0|1|2, +1, -]
     string    string:hex2show (
                               [
-                              int       prews         = 0,
-                              string    code          = "u"|"8"|"a",
-                              bool      isup          = true
+                              int       flag
                               ]
-                              );                                      [-0|1|2|3, +1, c]
+                              );                                          [-1|2, +1, c]
     string    string:hex2str  (
                               [
                               bool      isup          = false

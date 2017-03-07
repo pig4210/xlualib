@@ -71,49 +71,7 @@
     <ClInclude Include="xlualib.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="lxlog.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lzlib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lopenssl.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lalgorithm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lhex_str.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lsock.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lserialcomm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lxhttp.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lwinapi.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lmkmem.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ldes.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="laes.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lblowfish.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="lpe.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -230,8 +230,7 @@ BLOWFISH解密：不对齐部分不解密，忽略之
                                         string data,
                                         string key
                                         [,
-                                        string ivec = "\0\0\0\0\0\0\0\0",
-                                        int    block_size = 16
+                                        string ivec = "\0\0\0\0\0\0\0\0"
                                         ]
                                         );                            [-2|3|4, +1, c|v]
     string    blowfish.cbc.p7enc        ( ... );                      [-2|3|4, +1, c|v]
@@ -495,11 +494,13 @@ DES解密：不对齐部分不解密，忽略之
     string    hex2show        (
                               string    data
                               [,
-                              int       prews         = 0,
-                              string    code          = "u"|"8"|"a",
-                              bool      isup          = true
+                              int       flag
                               ]
-                              );                                      [-1|2|3|4, +1, c]
+                              );                                          [-1|2, +1, c]
+      -- 为了简化参数，设计flag
+      -- flag >= 0x10的部分被当作prews参数
+      -- flag & 1 表示ASCII、flag & 2 表示Unicode、flag & 8 表示UTF8
+      -- flag & 4 表示isup == false
     string    hex2str         (
                               string    data
                               [,
@@ -515,11 +516,9 @@ DES解密：不对齐部分不解密，忽略之
                               );                                       [-0|1|2, +1, -]
     string    string:hex2show (
                               [
-                              int       prews         = 0,
-                              string    code          = "u"|"8"|"a",
-                              bool      isup          = true
+                              int       flag
                               ]
-                              );                                      [-0|1|2|3, +1, c]
+                              );                                          [-1|2, +1, c]
     string    string:hex2str  (
                               [
                               bool      isup          = false
@@ -964,8 +963,9 @@ DES解密：不对齐部分不解密，忽略之
     TCP       tcp_new         (
                               string|uint         ip    = "0.0.0.0"
                               string|uint         port  = "0",
-                              string|uint         bind_port = "0"
-                              );                                          [-3, +1, c|v]
+                              string|uint         bind_port = "0",
+                              bool                NonBlockConnect = false
+                              );                                          [-4, +1, c|v]
         
     string ip, string port, uint ip, uint port
               TCP:getsockname ( );                                          [-0, +1, c]
@@ -1000,6 +1000,8 @@ DES解密：不对齐部分不解密，忽略之
         --当提供timeout(毫秒计)时，阻塞指定时间，直到连接发生或超时返回
         --连接发生时，返回新连接的TCP对象
         --超时返回nil, "timeout"
+    bool      TCP:check       ( );                                          [-0, +1, c]
+        --检测NonBlockConnect的TCP是否连接成功（成功后，自动设置阻塞）
 
 
 
@@ -1010,13 +1012,6 @@ DES解密：不对齐部分不解密，忽略之
 
 
 ●
-    void      sleep           ( [int ms = 0] );                           [-0|1, +0, -]
-        --暂停线程ms毫秒，ms允许为空
-
-    int       gettick         ( );                                          [-0, +1, -]
-        --获取系统启动时间毫秒数
-
-        
     void      Sleep           ( [int ms = 0] );                           [-0|1, +0, -]
         --暂停线程ms毫秒，ms允许为空
         
