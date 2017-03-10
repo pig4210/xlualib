@@ -21,49 +21,49 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="xlualib.cpp">
+    <ClCompile Include="laes.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lxlog.cpp">
+    <ClCompile Include="lalgorithm.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lzlib.cpp">
+    <ClCompile Include="lblowfish.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lopenssl.cpp">
+    <ClCompile Include="ldes.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lalgorithm.cpp">
+    <ClCompile Include="lhex_str.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lhex_str.cpp">
+    <ClCompile Include="lmkmem.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lsock.cpp">
+    <ClCompile Include="lopenssl.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lserialcomm.cpp">
+    <ClCompile Include="lpe.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lxhttp.cpp">
+    <ClCompile Include="lserialcomm.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lwinapi.cpp">
+    <ClCompile Include="lsock.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lmkmem.cpp">
+    <ClCompile Include="lwinapi.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="ldes.cpp">
+    <ClCompile Include="lxhttp.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="laes.cpp">
+    <ClCompile Include="lxlog.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lblowfish.cpp">
+    <ClCompile Include="lzlib.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="lpe.cpp">
+    <ClCompile Include="xlualib.cc">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

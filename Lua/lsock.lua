@@ -105,3 +105,12 @@
     bool      TCP:check       ( );                                          [-0, +1, c]
         --检测NonBlockConnect的TCP是否连接成功（成功后，自动设置阻塞）
 ]=======]
+
+--[=======[
+●
+    table, table
+              dns             ( string host );                            [-1, +2, c|v]
+        -- 指定host，解析DNS
+        -- 返回第一个table是ip字符串列表
+        -- 返回第二个table是ip值列表，大端序
+]=======]

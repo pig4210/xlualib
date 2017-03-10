@@ -49,23 +49,22 @@ static void load_my_lua(lua_State* ls)
   lua_pop(ls, lua_gettop(ls));
   }
 
+//本来使用全局静态map机制自动注册，但引起了诡异情况，遂恢复
 
-#include <map>
-
-using std::map;
-
-//! 做成函数即保证初始化，也保证内部访问
-static map<string, xlualib_register_routine>& routines()
-  {
-  static map<string, xlualib_register_routine> xlualib_register_routines;
-  return xlualib_register_routines;
-  }
-
-bool Add_XLUALIB_REGISTER_ROUTINE(const char* const name, xlualib_register_routine func)
-  {
-  routines()[name] = func;
-  return name != nullptr;
-  }
+extern void register_aes(lua_State* ls);
+extern void register_algorithm(lua_State* ls);
+extern void register_blowfish(lua_State* ls);
+extern void register_des(lua_State* ls);
+extern void register_hex_str(lua_State* ls);
+extern void register_mkmem(lua_State* ls);
+extern void register_openssl(lua_State* ls);
+extern void register_pe(lua_State* ls);
+extern void register_serialcomm(lua_State* ls);
+extern void register_sock(lua_State* ls);
+extern void register_winapi(lua_State* ls);
+extern void register_xhttp(lua_State* ls);
+extern void register_xlog(lua_State* ls);
+extern void register_zlib(lua_State* ls);
 
 extern "C"
 #ifndef XLUALIB_INSIDE
@@ -73,10 +72,20 @@ __declspec(dllexport)
 #endif
 int luaopen_xlualib(lua_State* ls)
   {
-  for(const auto& r : routines())
-    {
-    r.second(ls);
-    }
+  register_aes(ls);
+  register_algorithm(ls);
+  register_blowfish(ls);
+  register_des(ls);
+  register_hex_str(ls);
+  register_mkmem(ls);
+  register_openssl(ls);
+  register_pe(ls);
+  register_serialcomm(ls);
+  register_sock(ls);
+  register_winapi(ls);
+  register_xhttp(ls);
+  register_xlog(ls);
+  register_zlib(ls);
 
   load_my_lua(ls);
   return 0;

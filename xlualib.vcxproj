@@ -111,21 +111,21 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="laes.cpp" />
-    <ClCompile Include="lalgorithm.cpp" />
-    <ClCompile Include="lblowfish.cpp" />
-    <ClCompile Include="ldes.cpp" />
-    <ClCompile Include="lpe.cpp" />
-    <ClCompile Include="lwinapi.cpp" />
-    <ClCompile Include="lhex_str.cpp" />
-    <ClCompile Include="lmkmem.cpp" />
-    <ClCompile Include="lopenssl.cpp" />
-    <ClCompile Include="lserialcomm.cpp" />
-    <ClCompile Include="lsock.cpp" />
-    <ClCompile Include="lxhttp.cpp" />
-    <ClCompile Include="lxlog.cpp" />
-    <ClCompile Include="lzlib.cpp" />
-    <ClCompile Include="xlualib.cpp" />
+    <ClCompile Include="laes.cc" />
+    <ClCompile Include="lalgorithm.cc" />
+    <ClCompile Include="lblowfish.cc" />
+    <ClCompile Include="ldes.cc" />
+    <ClCompile Include="lpe.cc" />
+    <ClCompile Include="lwinapi.cc" />
+    <ClCompile Include="lhex_str.cc" />
+    <ClCompile Include="lmkmem.cc" />
+    <ClCompile Include="lopenssl.cc" />
+    <ClCompile Include="lserialcomm.cc" />
+    <ClCompile Include="lsock.cc" />
+    <ClCompile Include="lxhttp.cc" />
+    <ClCompile Include="lxlog.cc" />
+    <ClCompile Include="lzlib.cc" />
+    <ClCompile Include="xlualib.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
