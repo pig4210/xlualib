@@ -6,20 +6,20 @@ using std::string;
 using std::wstring;
 
 //////////////////////////////////////////////////////////////////////////
-static int LUA_C_str2hexs(lua_State* ls)
+static int LUA_C_hex2bin(lua_State* ls)
   {
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
   const bool errexit = lua_toboolean(ls, 2);
   const bool errbreak = lua_toboolean(ls, 3);
 
-  const auto hs = str2hexs(s, l, nullptr, errexit, errbreak);
+  const auto hs = hex2bin(s, l, nullptr, errexit, errbreak);
 
   lua_pushlstring(ls, (const char*)hs.c_str(), hs.size());
   return 1;
   }
 
-static int LUA_C_hex2show(lua_State* ls)
+static int LUA_C_showbin(lua_State* ls)
   {
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
@@ -50,11 +50,11 @@ static int LUA_C_hex2show(lua_State* ls)
     isup = false;
     }
 
-  lua_pushstring(ls, hex2show(s, l, code, isup, prews).c_str());
+  lua_pushstring(ls, showbin(s, l, code, isup, prews).c_str());
   return 1;
   }
 
-static int LUA_C_hex2str(lua_State* ls)
+static int LUA_C_bin2hex(lua_State* ls)
   {
   const int argc = lua_gettop(ls);
   if(argc < 1)  return 0;
@@ -64,7 +64,7 @@ static int LUA_C_hex2str(lua_State* ls)
 
   const bool isup = lua_toboolean(ls, 2);
 
-  lua_pushstring(ls, hex2str(s, l, isup).c_str());
+  lua_pushstring(ls, bin2hex(s, l, isup).c_str());
   return 1;
   }
 
@@ -138,9 +138,9 @@ void register_hex_str(lua_State* ls)
   {
   lua_pop(ls, lua_gettop(ls));
 
-  lua_register(ls, "str2hexs", LUA_C_str2hexs);
-  lua_register(ls, "hex2show", LUA_C_hex2show);
-  lua_register(ls, "hex2str", LUA_C_hex2str);
+  lua_register(ls, "hex2bin", LUA_C_hex2bin);
+  lua_register(ls, "showbin", LUA_C_showbin);
+  lua_register(ls, "bin2hex", LUA_C_bin2hex);
 
   lua_register(ls, "ws2s", LUA_C_ws2s);
   lua_register(ls, "s2ws", LUA_C_s2ws);

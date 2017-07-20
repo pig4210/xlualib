@@ -11,8 +11,12 @@
 
 --[=======[
 ●
-    string    strxor          ( string data, int xor );                     [-2, +1, -]
-    string    string:xor      ( int xor );                                  [-1, +1, -]
+    string    strxor          ( string data, int|string xor );              [-2, +1, c]
+    string    string:xor      ( int|string xor );                           [-1, +1, c]
+      --xor因子可以为字符串原始值如"\x12\x34"
+      --当xor因子为数值时，将转换成小端序的字符串原始值，并去除高位00
+      --如0x00001234等价于"\x34\x12"
+      --请不要提供0值，因为没有意义，函数会视为空参数
 ]=======]
 string.xor            =  function( ... ) return strxor                     ( ... ); end
 
@@ -28,14 +32,17 @@ string.md5            =  function( ... ) return md5                        ( ...
     int       crc16           ( string data );                              [-1, +1, c]
     int       crc32           ( string data );                              [-1, +1, c]
     int       crc64           ( string data );                              [-1, +1, c]
+    int       crcccitt        ( string data );                              [-1, +1, c]
 
     int       string:crc16    ( );                                          [-0, +1, -]
     int       string:crc32    ( );                                          [-0, +1, -]
     int       string:crc64    ( );                                          [-0, +1, -]
+    int       string:crcccitt ( );                                          [-0, +1, -]
 ]=======]
 string.crc16          =  function( ... ) return crc16                      ( ... ); end
 string.crc32          =  function( ... ) return crc32                      ( ... ); end
 string.crc64          =  function( ... ) return crc64                      ( ... ); end
+string.crcccitt       =  function( ... ) return crcccitt                   ( ... ); end
 
 --[=======[
 ●

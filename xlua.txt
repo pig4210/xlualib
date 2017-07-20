@@ -1,4 +1,4 @@
-xlua版本 5.0
+xlua版本 6.0
 
 
 -------- -------- -------- --------
@@ -116,8 +116,12 @@ AES解密：不对齐部分不解密，忽略之
 
 
 ●
-    string    strxor          ( string data, int xor );                     [-2, +1, -]
-    string    string:xor      ( int xor );                                  [-1, +1, -]
+    string    strxor          ( string data, int|string xor );              [-2, +1, c]
+    string    string:xor      ( int|string xor );                           [-1, +1, c]
+      --xor因子可以为字符串原始值如"\x12\x34"
+      --当xor因子为数值时，将转换成小端序的字符串原始值，并去除高位00
+      --如0x00001234等价于"\x34\x12"
+      --请不要提供0值，因为没有意义，函数会视为空参数
 
 
 
@@ -131,10 +135,12 @@ AES解密：不对齐部分不解密，忽略之
     int       crc16           ( string data );                              [-1, +1, c]
     int       crc32           ( string data );                              [-1, +1, c]
     int       crc64           ( string data );                              [-1, +1, c]
+    int       crcccitt        ( string data );                              [-1, +1, c]
 
     int       string:crc16    ( );                                          [-0, +1, -]
     int       string:crc32    ( );                                          [-0, +1, -]
     int       string:crc64    ( );                                          [-0, +1, -]
+    int       string:crcccitt ( );                                          [-0, +1, -]
 
 
 
@@ -484,14 +490,14 @@ DES解密：不对齐部分不解密，忽略之
 
 
 ●
-    string    str2hexs        (
-                               string   str
+    string    hex2bin         (
+                               string   hex
                                [,
                                bool     errexit       = false,
                                bool     errbreak      = false
                                ]
                                );                                       [-1|2|3, +1, c]
-    string    hex2show        (
+    string    showbin         (
                               string    data
                               [,
                               int       flag
@@ -501,33 +507,33 @@ DES解密：不对齐部分不解密，忽略之
       -- flag >= 0x10的部分被当作prews参数
       -- flag & 1 表示ASCII、flag & 2 表示Unicode、flag & 8 表示UTF8
       -- flag & 4 表示isup == false
-    string    hex2str         (
+    string    bin2hex         (
                               string    data
                               [,
                               bool      isup          = false
                               ]
                               );                                          [-1|2, +1, c]
 
-    string    string:str2hexs (
+    string    string:hex2bin  (
                               [
                               bool      errexit       = false,
                               bool      errbreak      = false
                               ]
                               );                                       [-0|1|2, +1, -]
-    string    string:hex2show (
+    string    string:showbin  (
                               [
                               int       flag
                               ]
                               );                                          [-1|2, +1, c]
-    string    string:hex2str  (
+    string    string:bin2hex  (
                               [
                               bool      isup          = false
                               ]
                               );                                          [-0|1, +1, -]
 
                               
-    string.hexs = string.str2hexs;
-    string.show = string.hex2show;
+    string.bins = string.hex2bin;
+    string.show = string.showbin;
 
 
 
@@ -550,6 +556,21 @@ DES解密：不对齐部分不解密，忽略之
     string    string:ws2utf8  ( );                                          [-0, +1, -]
     string    string:utf82s   ( );                                          [-0, +1, -]
     string    string:s2utf8   ( );                                          [-0, +1, -]
+
+
+
+●
+    string    readfile        (
+                              string filename
+                              [, string mode = "rb" ]
+                              );                                          [-1|2, +1, c]
+    void      writefile       (
+                              string data,
+                              string filename
+                              [, string mode = "wb"]
+                              );                                          [-2|3, +0, c]
+    string    string:read     ( [ string mode = "rb" ] );                 [-0|1, +1, -]
+    void      string:write    ( string filename [, string mode = "wb" ] );[-1|2, +0, -]
 
 
 
