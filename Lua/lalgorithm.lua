@@ -43,6 +43,15 @@ string.crc16          =  function( ... ) return crc16                      ( ...
 string.crc32          =  function( ... ) return crc32                      ( ... ); end
 string.crc64          =  function( ... ) return crc64                      ( ... ); end
 string.crcccitt       =  function( ... ) return crcccitt                   ( ... ); end
+--[=======[
+¡ñ
+    string    tovarint        ( int value );                                [-1, +1, c]
+    int value, int userbytes
+              getvarint       ( string data );                              [-1, +2, c|v]
+    int value, int userbytes
+              string:getvarint( );                                          [-0, +2, c|v]
+]=======]
+string.getvarint      =  function( ... ) return getvarint                  ( ... ); end
 
 --[=======[
 ¡ñ

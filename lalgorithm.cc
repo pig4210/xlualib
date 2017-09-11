@@ -95,6 +95,29 @@ static int LUA_C_crcccitt(lua_State* ls)
   return 1;
   }
 //////////////////////////////////////////////////////////////////////////
+static int LUA_C_tovarint(lua_State* ls)
+  {
+  const auto res = tovarint(luaL_checkinteger(ls, 1));
+
+  lua_pushlstring(ls, (const char*)res.c_str(), res.size());
+  return 1;
+  }
+static int LUA_C_getvarint(lua_State* ls)
+  {
+  size_t l = 0;
+  const auto s = luaL_checklstring(ls, 1, &l);
+  lua_Integer i;
+  const auto res = getvarint(i, (const unsigned char*)s, l);
+  if(res == 0)
+    {
+    lua_pushstring(ls, "getvarint失败");
+    return lua_error(ls);
+    }
+  lua_pushinteger(ls, i);
+  lua_pushinteger(ls, res);
+  return 2;
+  }
+//////////////////////////////////////////////////////////////////////////
 static int LUA_C_TeanEncrypt(lua_State* ls)
   {
   size_t l = 0;
@@ -285,6 +308,9 @@ void register_algorithm(lua_State* ls)
   lua_register(ls, "crc32", LUA_C_crc32);
   lua_register(ls, "crc64", LUA_C_crc64);
   lua_register(ls, "crcccitt", LUA_C_crcccitt);
+
+  lua_register(ls, "tovarint", LUA_C_tovarint);
+  lua_register(ls, "getvarint", LUA_C_getvarint);
 
   lua_register(ls, "TeanEncrypt", LUA_C_TeanEncrypt);
   lua_register(ls, "TeanDecrypt", LUA_C_TeanDecrypt);

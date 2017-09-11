@@ -91,6 +91,15 @@ function xline:get_qword()
 end
 
 --[=======[
+    int       xline:get_varint          ( );  --读取一个varint              [-0, +1, e]
+]=======]
+function xline:get_varint()
+  local i, size = getvarint( self.line );
+  self.line = self.line:sub( size );
+  return i;
+end
+
+--[=======[
     int head_size, int real_size
               xline:get_head            ( );                                [-0, +2, e]
         --读取数据头，返回数据头值、真实数据头值(减去可能包含的数据头大小)
@@ -189,6 +198,14 @@ function xline:get_head_unicode()
   local size, rsize = self:get_head();
   return self:get_unicode_str( rsize );
 end
+--[=======[
+    string    xline:get_vhead_str       ( );                                [-0, +1, e]
+        --读取带头的字符串
+]=======]
+function xline:get_vhead_str()
+  local size, usize = self:get_varint();
+  return self:getstr( size, 1 );
+end
 
 -------- -------- -------- --------
 --[=======[
@@ -231,6 +248,14 @@ end
 function xline:set_qword( v )
   return self:push("I8", v);
 end
+--[=======[
+    xline     xline:set_varint            ( int v );      --写入一个varin   [-1, +1, c]
+]=======]
+function xline:set_varint( v )
+  self.line = self.line .. tovarint( v );
+  return self;
+end
+
 --[=======[
     xline     xline:set_head            ( int size );                       [-1, +1, c]
         --写入数据头，自动根据状态加入数据头大小
@@ -290,6 +315,13 @@ function xline:set_head_unicode( str )
   self:set_head(#str);
   return self:set_unicode_str(str);
 end
+--[=======[
+    xline     xline:set_vhead_str       ( string str ); --写入带头的字符串  [-1, +1, c]
+]=======]
+function xline:set_vhead_str( str )
+  self:set_varint( #str );
+  return self:set_str( str, 1 );
+end
 
 -------- -------- -------- --------
 --[=======[
@@ -297,6 +329,7 @@ end
     xline.gb    = xline.get_byte;
     xline.gw    = xline.get_word;
     xline.gd    = xline.get_dword;
+    xline.gv    = xline.get_varint;
     xline.gh    = xline.get_head;
     xline.gl    = xline.get_line;
     xline.ghl   = xline.get_head_line;
@@ -305,6 +338,7 @@ end
     xline.gu    = xline.get_unicode_str;
     xline.gha   = xline.get_head_ascii;
     xline.ghu   = xline.get_head_unicode;
+    xline.gvs   = xline.get_vhead_str;
 
     xline.cl    = xline.clear;
     xline.as    = xline.assign;
@@ -312,6 +346,7 @@ end
     xline.sb    = xline.set_byte;
     xline.sw    = xline.set_word;
     xline.sd    = xline.set_dword;
+    xline.sv    = xline.set_varint;
     xline.sh    = xline.set_head;
     xline.sl    = xline.set_line;
     xline.shl   = xline.set_head_line;
@@ -320,11 +355,13 @@ end
     xline.su    = xline.set_unicode_str;
     xline.sha   = xline.set_head_ascii;
     xline.shu   = xline.set_head_unicode;
+    xline.svs   = xline.set_vhead_str;
 ]=======]
 -------- -------- -------- --------
 xline.gb    = xline.get_byte;
 xline.gw    = xline.get_word;
 xline.gd    = xline.get_dword;
+xline.gv    = xline.get_varint;
 xline.gq    = xline.get_qword;
 xline.gh    = xline.get_head;
 xline.gl    = xline.get_line;
@@ -334,6 +371,7 @@ xline.ga    = xline.get_ascii_str;
 xline.gu    = xline.get_unicode_str;
 xline.gha   = xline.get_head_ascii;
 xline.ghu   = xline.get_head_unicode;
+xline.gvs   = xline.get_vhead_str;
 
 xline.cl    = xline.clear;
 xline.as    = xline.assign;
@@ -342,6 +380,7 @@ xline.sb    = xline.set_byte;
 xline.sw    = xline.set_word;
 xline.sd    = xline.set_dword;
 xline.sq    = xline.set_qword;
+xline.sv    = xline.set_varint;
 xline.sh    = xline.set_head;
 xline.sl    = xline.set_line;
 xline.shl   = xline.set_head_line;
@@ -350,6 +389,7 @@ xline.sa    = xline.set_ascii_str;
 xline.su    = xline.set_unicode_str;
 xline.sha   = xline.set_head_ascii;
 xline.shu   = xline.set_head_unicode;
+xline.svs   = xline.set_vhead_str;
 
 -------- -------- -------- --------
 --[=======[

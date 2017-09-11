@@ -1,4 +1,4 @@
-xlua版本 6.0
+xlua版本 6.1
 
 
 -------- -------- -------- --------
@@ -141,6 +141,15 @@ AES解密：不对齐部分不解密，忽略之
     int       string:crc32    ( );                                          [-0, +1, -]
     int       string:crc64    ( );                                          [-0, +1, -]
     int       string:crcccitt ( );                                          [-0, +1, -]
+
+
+
+●
+    string    tovarint        ( int value );                                [-1, +1, c]
+    int value, int userbytes
+              getvarint       ( string data );                              [-1, +2, c|v]
+    int value, int userbytes
+              string:getvarint( );                                          [-0, +2, c|v]
 
 
 
@@ -1155,6 +1164,10 @@ DES解密：不对齐部分不解密，忽略之
 
 
 
+    int       xline:get_varint          ( );  --读取一个varint              [-0, +1, e]
+
+
+
     int head_size, int real_size
               xline:get_head            ( );                                [-0, +2, e]
         --读取数据头，返回数据头值、真实数据头值(减去可能包含的数据头大小)
@@ -1200,6 +1213,11 @@ DES解密：不对齐部分不解密，忽略之
 
 
 
+    string    xline:get_vhead_str       ( );                                [-0, +1, e]
+        --读取带头的字符串
+
+
+
 ●
     xline     xline:clear               ( );                                [-0, +1, -]
         --清除数据内容
@@ -1216,6 +1234,10 @@ DES解密：不对齐部分不解密，忽略之
     xline     xline:set_byte            ( int v );      --写入一个byte      [-1, +1, c]
     xline     xline:set_word            ( int v );      --写入一个word      [-1, +1, c]
     xline     xline:set_dword           ( int v );      --写入一个dword     [-1, +1, c]
+
+
+
+    xline     xline:set_varint            ( int v );      --写入一个varin   [-1, +1, c]
 
 
 
@@ -1247,10 +1269,15 @@ DES解密：不对齐部分不解密，忽略之
 
 
 
+    xline     xline:set_vhead_str       ( string str ); --写入带头的字符串  [-1, +1, c]
+
+
+
 ●
     xline.gb    = xline.get_byte;
     xline.gw    = xline.get_word;
     xline.gd    = xline.get_dword;
+    xline.gv    = xline.get_varint;
     xline.gh    = xline.get_head;
     xline.gl    = xline.get_line;
     xline.ghl   = xline.get_head_line;
@@ -1259,6 +1286,7 @@ DES解密：不对齐部分不解密，忽略之
     xline.gu    = xline.get_unicode_str;
     xline.gha   = xline.get_head_ascii;
     xline.ghu   = xline.get_head_unicode;
+    xline.gvs   = xline.get_vhead_str;
 
     xline.cl    = xline.clear;
     xline.as    = xline.assign;
@@ -1266,6 +1294,7 @@ DES解密：不对齐部分不解密，忽略之
     xline.sb    = xline.set_byte;
     xline.sw    = xline.set_word;
     xline.sd    = xline.set_dword;
+    xline.sv    = xline.set_varint;
     xline.sh    = xline.set_head;
     xline.sl    = xline.set_line;
     xline.shl   = xline.set_head_line;
@@ -1274,6 +1303,7 @@ DES解密：不对齐部分不解密，忽略之
     xline.su    = xline.set_unicode_str;
     xline.sha   = xline.set_head_ascii;
     xline.shu   = xline.set_head_unicode;
+    xline.svs   = xline.set_vhead_str;
 
 
 
