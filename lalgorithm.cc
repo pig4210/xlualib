@@ -123,7 +123,10 @@ static int LUA_C_TeanEncrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  const auto res(TeanEncrypt(s, l, TEA_KEY(luaL_checkstring(ls, 2))));
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+  
+  const auto res(TeanEncrypt(s, l, TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -134,7 +137,10 @@ static int LUA_C_TeanDecrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  const auto res(TeanDecrypt(s, l, TEA_KEY(luaL_checkstring(ls, 2))));
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
+  const auto res(TeanDecrypt(s, l, TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -145,11 +151,14 @@ static int LUA_C_TeaEncrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
   const auto res(
     TeaEncrypt(
     s,
     l,
-    TEA_KEY(luaL_checkstring(ls, 2)),
+    TEA_KEY(ks, kl),
     luaL_checkinteger(ls, 3),
     luaL_checkinteger(ls, 4)
     ));
@@ -163,11 +172,14 @@ static int LUA_C_TeaDecrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
   const auto res(
     TeaDecrypt(
     s,
     l,
-    TEA_KEY(luaL_checkstring(ls, 2)),
+    TEA_KEY(ks, kl),
     luaL_checkinteger(ls, 3),
     luaL_checkinteger(ls, 4)
     ));
@@ -178,8 +190,11 @@ static int LUA_C_TeaDecrypt(lua_State* ls)
 
 static int LUA_C_TeanEncipher(lua_State* ls)
   {
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
   const auto res(
-    TeanEncipher(luaL_checkstring(ls, 1), TEA_KEY(luaL_checkstring(ls, 2))));
+    TeanEncipher(luaL_checkstring(ls, 1), TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.Data, sizeof(res.Data));
   return 1;
@@ -187,8 +202,11 @@ static int LUA_C_TeanEncipher(lua_State* ls)
 
 static int LUA_C_TeanDecipher(lua_State* ls)
   {
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
   const auto res(
-    TeanDecipher(luaL_checkstring(ls, 1), TEA_KEY(luaL_checkstring(ls, 2))));
+    TeanDecipher(luaL_checkstring(ls, 1), TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.Data, sizeof(res.Data));
   return 1;
@@ -199,7 +217,10 @@ static int LUA_C_XTeanEncrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  const auto res(XTeanEncrypt(s, l, TEA_KEY(luaL_checkstring(ls, 2))));
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
+  const auto res(XTeanEncrypt(s, l, TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -210,7 +231,10 @@ static int LUA_C_XTeanDecrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  const auto res(XTeanDecrypt(s, l, TEA_KEY(luaL_checkstring(ls, 2))));
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
+  const auto res(XTeanDecrypt(s, l, TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -221,7 +245,10 @@ static int LUA_C_XxTeaEncrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  const auto res(XxTeaEncrypt(s, l, TEA_KEY(luaL_checkstring(ls, 2))));
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
+  const auto res(XxTeaEncrypt(s, l, TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -232,7 +259,10 @@ static int LUA_C_XxTeaDecrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  const auto res(XxTeaDecrypt(s, l, TEA_KEY(luaL_checkstring(ls, 2))));
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
+
+  const auto res(XxTeaDecrypt(s, l, TEA_KEY(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -243,10 +273,10 @@ static int LUA_C_aes_encrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  size_t ll = 0;
-  const auto key = luaL_checklstring(ls, 2, &ll);
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
 
-  const auto res(AesEncrypt(s, l, AesKey(key, ll)));
+  const auto res(AesEncrypt(s, l, AesKey(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -257,10 +287,10 @@ static int LUA_C_aes_decrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  size_t ll = 0;
-  const auto key = luaL_checklstring(ls, 2, &ll);
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
 
-  const auto res(AesDecrypt(s, l, AesKey(key, ll)));
+  const auto res(AesDecrypt(s, l, AesKey(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -271,10 +301,10 @@ static int LUA_C_des_encrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  size_t ll = 0;
-  const auto key = luaL_checklstring(ls, 2, &ll);
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
 
-  const auto res(DesEncrypt(s, l, DesKey(key, ll)));
+  const auto res(DesEncrypt(s, l, DesKey(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
@@ -285,10 +315,10 @@ static int LUA_C_des_decrypt(lua_State* ls)
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
 
-  size_t ll = 0;
-  const auto key = luaL_checklstring(ls, 2, &ll);
+  size_t kl = 0;
+  const auto ks = luaL_checklstring(ls, 2, &kl);
 
-  const auto res(DesDecrypt(s, l, DesKey(key, ll)));
+  const auto res(DesDecrypt(s, l, DesKey(ks, kl)));
 
   lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;

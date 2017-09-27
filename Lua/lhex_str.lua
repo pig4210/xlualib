@@ -126,3 +126,16 @@ end
 string.read           = function( ... ) return readfile                    ( ... ); end
 string.write          = function( ... ) return writefile                   ( ... ); end
 
+
+--为了兼容之前的xlualib，特意添加
+
+str2hexs = hex2bin;
+hex2show = showbin;
+hex2str = bin2hex;
+
+string.str2hexs       = function( ... ) return hex2bin                     ( ... ); end
+string.hex2show       = function( ... ) return showbin                     ( ... ); end
+string.hex2str        = function( ... ) return bin2hex                     ( ... ); end
+
+string.hexs = string.str2hexs;
+

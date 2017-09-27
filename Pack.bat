@@ -24,8 +24,8 @@ echo Lua路径 %LuaExe%
 echo 合并文件...
 
 rem 初始化合并脚本、合并注释
-set xlua_ver=6.1
-echo xlua_ver = %xlua_ver%>%DestLua%
+set xlua_ver=6.2.1709.2711
+echo xlua_ver = "%xlua_ver%">%DestLua%
 echo xlua版本 %xlua_ver%>%DestCmt%
 
 rem 合并脚本；提取注释
