@@ -45,11 +45,11 @@ string.crc64          =  function( ... ) return crc64                      ( ...
 string.crcccitt       =  function( ... ) return crcccitt                   ( ... ); end
 --[=======[
 ¡ñ
-    string    tovarint        ( int value );                                [-1, +1, c]
+    string    tovarint        ( int value[, bool signed] );               [-1|2, +1, c]
     int value, int userbytes
-              getvarint       ( string data );                              [-1, +2, c|v]
+              getvarint       ( string data[, bool signed] );             [-1|2, +2, c]
     int value, int userbytes
-              string:getvarint( );                                          [-0, +2, c|v]
+              string:getvarint( [bool signed] );                          [-0|2, +2, -]
 ]=======]
 string.getvarint      =  function( ... ) return getvarint                  ( ... ); end
 

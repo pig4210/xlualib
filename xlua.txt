@@ -1,4 +1,4 @@
-xlua版本 6.2.1709.2711
+xlua版本 6.3.1710.0909
 
 
 -------- -------- -------- --------
@@ -145,11 +145,11 @@ AES解密：不对齐部分不解密，忽略之
 
 
 ●
-    string    tovarint        ( int value );                                [-1, +1, c]
+    string    tovarint        ( int value[, bool signed] );               [-1|2, +1, c]
     int value, int userbytes
-              getvarint       ( string data );                              [-1, +2, c|v]
+              getvarint       ( string data[, bool signed] );             [-1|2, +2, c]
     int value, int userbytes
-              string:getvarint( );                                          [-0, +2, c|v]
+              string:getvarint( [bool signed] );                          [-0|2, +2, -]
 
 
 
@@ -1164,7 +1164,7 @@ DES解密：不对齐部分不解密，忽略之
 
 
 
-    int       xline:get_varint          ( );  --读取一个varint              [-0, +1, e]
+    int       xline:get_varint          ( [bool signed] );--读一个varint  [-0|1, +1, e]
 
 
 
@@ -1213,7 +1213,7 @@ DES解密：不对齐部分不解密，忽略之
 
 
 
-    string    xline:get_vhead_str       ( );                                [-0, +1, e]
+    string    xline:get_vhead_str       ( [bool signed] );                  [-0, +1, e]
         --读取带头的字符串
 
 
@@ -1237,7 +1237,8 @@ DES解密：不对齐部分不解密，忽略之
 
 
 
-    xline     xline:set_varint            ( int v );      --写入一个varin   [-1, +1, c]
+    xline     xline:set_varint            ( int v [,bool signed] );         [-1, +1, c]
+        --写入一个varint
 
 
 
@@ -1269,7 +1270,8 @@ DES解密：不对齐部分不解密，忽略之
 
 
 
-    xline     xline:set_vhead_str       ( string str ); --写入带头的字符串  [-1, +1, c]
+    xline     xline:set_vhead_str       ( string str [,bool signed] );      [-1, +1, c]
+        --写入带头的字符串
 
 
 
@@ -1362,6 +1364,17 @@ DES解密：不对齐部分不解密，忽略之
     void      string:xinfo    ( ... );                                      [-?, +0, -]
     void      string:xdbg     ( ... );                                      [-?, +0, -]
     void      string:xtrace   ( ... );                                      [-?, +0, -]
+
+
+
+-------- -------- -------- --------
+          protobuf操作
+-------- -------- -------- --------
+
+
+
+●
+    table     xpbc                      ( string protobuf );                [-0, +1, -]
 
 
 

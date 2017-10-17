@@ -97,24 +97,41 @@ static int LUA_C_crcccitt(lua_State* ls)
 //////////////////////////////////////////////////////////////////////////
 static int LUA_C_tovarint(lua_State* ls)
   {
-  const auto res = tovarint(luaL_checkinteger(ls, 1));
+  const auto v = luaL_checkinteger(ls, 1);
+  const bool s = lua_toboolean(ls, 2);
+  if(s)
+    {
+    const auto res = tovarint((int64)v);
+    lua_pushlstring(ls, (const char*)res.c_str(), res.size());
+    }
+  else
+    {
+    const auto res = tovarint((uint64)v);
+    lua_pushlstring(ls, (const char*)res.c_str(), res.size());
+    }
 
-  lua_pushlstring(ls, (const char*)res.c_str(), res.size());
   return 1;
   }
 static int LUA_C_getvarint(lua_State* ls)
   {
   size_t l = 0;
   const auto s = luaL_checklstring(ls, 1, &l);
-  lua_Integer i;
-  const auto res = getvarint(i, (const unsigned char*)s, l);
-  if(res == 0)
+  const bool is = lua_toboolean(ls, 2);
+  
+  int64 sv = 0;
+  uint64 uv = 0;
+  if(is)
     {
-    lua_pushstring(ls, "getvarint失败");
-    return lua_error(ls);
+    const auto res = getvarint(sv, (const unsigned char*)s, l);
+    lua_pushinteger(ls, sv);
+    lua_pushinteger(ls, res);
     }
-  lua_pushinteger(ls, i);
-  lua_pushinteger(ls, res);
+  else
+    {
+    const auto res = getvarint(uv, (const unsigned char*)s, l);
+    lua_pushinteger(ls, uv);
+    lua_pushinteger(ls, res);
+    }
   return 2;
   }
 //////////////////////////////////////////////////////////////////////////

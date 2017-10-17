@@ -22,8 +22,6 @@
                         读取字符串，额外读出结尾0
           nets          根据net_flag决定为大端">"或小端"<"
 ]=======]
-if string.pack and string.unpack then
-
 xline = {};
 xline.__index = xline;
 
@@ -67,9 +65,9 @@ end
         --指定读取格式，读取数据并修改处理索引
 ]=======]
 function xline:pick( fmt )
-  local v = { string.unpack(self.nets .. fmt, self.line) };
-  self.line = self.line:sub(table.unpack(v, #v, #v));
-  return table.unpack(v, 1, #v - 1);
+  local v = { string.unpack( self.nets .. fmt, self.line ) };
+  self.line = self.line:sub( table.unpack( v, #v, #v ) );
+  return table.unpack( v, 1, #v - 1 );
 end
 
 --[=======[
@@ -91,10 +89,10 @@ function xline:get_qword()
 end
 
 --[=======[
-    int       xline:get_varint          ( );  --读取一个varint              [-0, +1, e]
+    int       xline:get_varint          ( [bool signed] );--读一个varint  [-0|1, +1, e]
 ]=======]
-function xline:get_varint()
-  local i, size = getvarint( self.line );
+function xline:get_varint( signed )
+  local i, size = getvarint( self.line, signed );
   self.line = self.line:sub( size );
   return i;
 end
@@ -199,11 +197,11 @@ function xline:get_head_unicode()
   return self:get_unicode_str( rsize );
 end
 --[=======[
-    string    xline:get_vhead_str       ( );                                [-0, +1, e]
+    string    xline:get_vhead_str       ( [bool signed] );                  [-0, +1, e]
         --读取带头的字符串
 ]=======]
-function xline:get_vhead_str()
-  local size, usize = self:get_varint();
+function xline:get_vhead_str( signed )
+  local size, usize = self:get_varint( signed );
   return self:getstr( size, 1 );
 end
 
@@ -249,10 +247,11 @@ function xline:set_qword( v )
   return self:push("I8", v);
 end
 --[=======[
-    xline     xline:set_varint            ( int v );      --写入一个varin   [-1, +1, c]
+    xline     xline:set_varint            ( int v [,bool signed] );         [-1, +1, c]
+        --写入一个varint
 ]=======]
-function xline:set_varint( v )
-  self.line = self.line .. tovarint( v );
+function xline:set_varint( v, signed )
+  self.line = self.line .. tovarint( v, signed );
   return self;
 end
 
@@ -316,10 +315,11 @@ function xline:set_head_unicode( str )
   return self:set_unicode_str(str);
 end
 --[=======[
-    xline     xline:set_vhead_str       ( string str ); --写入带头的字符串  [-1, +1, c]
+    xline     xline:set_vhead_str       ( string str [,bool signed] );      [-1, +1, c]
+        --写入带头的字符串
 ]=======]
-function xline:set_vhead_str( str )
-  self:set_varint( #str );
+function xline:set_vhead_str( str, signed )
+  self:set_varint( #str, signed );
   return self:set_str( str, 1 );
 end
 
@@ -399,5 +399,3 @@ xline.svs   = xline.set_vhead_str;
 ]=======]
 line = xline;
 netline = xline:new(); netline.net_flag = true;
-
-end

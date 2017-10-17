@@ -147,6 +147,7 @@
     <None Include="Lua\lxline.lua" />
     <None Include="Lua\lxlog.lua" />
     <None Include="Lua\lzlib.lua" />
+    <None Include="Lua\lxpb.lua" />
     <None Include="Pack.bat" />
     <None Include="xlua.lua" />
   </ItemGroup>
