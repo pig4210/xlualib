@@ -43,9 +43,10 @@ static void load_my_lua(lua_State* ls)
   if(LUA_OK != luaL_loadbufferx(ls, tmp.c_str(), tmp.size(), name, nullptr) ||
      LUA_OK != lua_pcall(ls, 0, 0, 0))
     {
-    //xerr << "do my lua" << lua_tostring(ls, -1);
+    //xerr << "do my lua : " << lua_tostring(ls, -1);
     }
 
+  //xerr << "load my lua done";
   lua_pop(ls, lua_gettop(ls));
   }
 

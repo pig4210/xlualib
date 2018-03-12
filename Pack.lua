@@ -1,5 +1,5 @@
 local function readfile( filename )
-    local file, err = io.open( filename, "r" );
+    local file, err = io.open( filename, "rb" );
     if not file then
         return nil, err;
     end
@@ -10,12 +10,9 @@ local function readfile( filename )
 end
 
 local function writefile( data, filename )
-    local file, err = io.open( filename, "w" );
+    local file, err = io.open( filename, "wb" );
     if not file then
         return err;
-    end
-    if #data < 3 or data:sub( 1, 3 ) == "\xEF\xBB\xBF" then
-        data = "\xEF\xBB\xBF" .. data;
     end
     local f, e = file:write( data );
     file:close();
@@ -66,5 +63,6 @@ if not compiled then
     return error( "Compile Lua fail ! " .. err );
 end
 
+--writefile( luadata, dstlua );
 writefile( string.dump( compiled, true ), dstlua );
-writefile( mddata, dstmd );
+writefile( "\xEF\xBB\xBF" .. mddata, dstmd );
