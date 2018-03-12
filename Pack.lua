@@ -1,3 +1,6 @@
+local argv = { ... };
+
+
 local function readfile( filename )
     local file, err = io.open( filename, "rb" );
     if not file then
@@ -19,9 +22,10 @@ local function writefile( data, filename )
     return e;
 end
 
-local function EnumFile( filter )
+local function EnumFile( path,  filter )
+    print( "EnumFile", path, filter );
     local cmd, err = io.popen(
-        [[for /r .\\Lua %f in (]] .. filter .. [[) do @echo %f]],
+        [[for /r "]] .. path .. [[" %f in (]] .. filter .. [[) do @echo %f]],
         "r"
     );
     if not cmd then
@@ -48,14 +52,22 @@ local function EnumFile( filter )
     return datas;
 end
 
-local luadata = EnumFile( "*.lua" );
-local mddata = EnumFile( "*.md" );
+if #argv < 3 then
+    return error( "Pack.lua Path1 [Path2 Path3 ...] DestLua DestMd" );
+end
+
+local luadata = "";
+local mddata = "";
+for k = 1, #argv - 2 do
+    luadata = luadata .. EnumFile( argv[k], "*.lua" );
+    mddata = mddata .. EnumFile( argv[k], "*.md" );
+end
 
 for note in luadata:gmatch( '%-%-%[=======%[(.-)%]=======%]') do
     mddata = mddata .. note;
 end
 
-local dstlua, dstmd = ...;
+local dstlua, dstmd = argv[ #argv - 1 ], argv[ #argv ];
 
 local compiled, err = load( luadata );
 if not compiled then

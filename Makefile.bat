@@ -19,7 +19,7 @@
     set AR=lib
     set LNK=link
 
-    set LuaBasePath=..\\Lua
+    set LuaBasePath=%MyPath%..\\Lua
     set DestLua=xlua.lua
     set DestCmt=xlua.txt
     set LuaExe=%LuaBasePath%\%PLAT%\\lua
@@ -61,7 +61,7 @@
 
 :packlua
     echo ==== ==== ==== ==== Packing lua(%PLAT%)...
-    "%LuaExe%" "%VPATH%\\Pack.lua" "%VPATH%\\xlua.lua" "%VPATH%\\xlua.md" >nul
+    "%LuaExe%" "%VPATH%\\Pack.lua" "%VPATH%\\Lua" "%VPATH%\\xlua.lua" "%VPATH%\\xlua.md" >nul
     if not %errorlevel%==0 goto compile_error
 
 :res
@@ -80,6 +80,14 @@
     del "%GPATH%\\*.obj"
     del "%GPATH%\\*.res"
     del "%VPATH%\\xlua.lua"
+
+:test
+    echo ==== ==== ==== ==== Testing(%PLAT%)...
+    copy "%LuaBasePath%\\%PLAT%\\luadll.exe" "%GPATH%\\lua.exe" >nul
+    copy "%LuaBasePath%\\%PLAT%\\lua.dll" "%GPATH%" >nul
+    cd "%GPATH%"
+    lua -e "require [[xlualib]]; print( ([[AABBCC]]):show() )" >nul
+    if not %errorlevel%==0 goto link_error
 
 :done
     echo.
