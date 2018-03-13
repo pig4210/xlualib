@@ -16,13 +16,10 @@
     set GPATH=%MyPath%\\%PLAT%
 
     set CC=cl
-    set AR=lib
     set LNK=link
 
     set LuaBasePath=%MyPath%..\\Lua
-    set DestLua=xlua.lua
-    set DestCmt=xlua.txt
-    set LuaExe=%LuaBasePath%\%PLAT%\\lua
+    set LuaExe=%LuaBasePath%\\%PLAT%\\lua
 
 :compileflags
     set CFLAGS= /c /MP /GS- /TP /Qpar /GL /analyze- /W4 /Gy /Zc:wchar_t /Zi /Gm- /Ox /Zc:inline /fp:precise /D "WIN32" /D "NDEBUG" /D "_UNICODE" /D "UNICODE" /fp:except- /errorReport:none /GF /WX /Zc:forScope /GR- /Gd /Oy /Oi /MT /EHa /nologo /Fo"%GPATH%\\"
@@ -43,9 +40,14 @@
     set LFLAGS=%LFLAGS% /LIBPATH:"..\\curl\\%PLAT%" /LIBPATH:"..\\Lua\\%PLAT%" /LIBPATH:"..\\openssl\\%PLAT%" /LIBPATH:"..\\zlib\\%PLAT%" /LIBPATH:"..\\xlib\\%PLAT%" /DLL
 
 :start
-    echo ==== ==== ==== ==== Start compiling %PLAT%...
+    echo ==== ==== ==== ==== Prepare dest folder(%PLAT%)...
+
+    rd /S /Q "%GPATH%" >nul
+    if exist "%GPATH%" goto fail
+    mkdir "%GPATH%" >nul
 
     echo ==== ==== ==== ==== Prepare environment(%PLAT%)...
+
     cd /d %VCPATH%
     if "%1" == "" (
         call vcvarsall.bat amd64 >nul
@@ -53,45 +55,44 @@
         call vcvarsall.bat x86 >nul
     )
 
-    echo ==== ==== ==== ==== Prepare dest folder(%PLAT%)...
-    if not exist "%GPATH%" mkdir %GPATH%
-    del /q "%GPATH%\\*.*"
-
     cd /d %VPATH%
 
 :packlua
     echo ==== ==== ==== ==== Packing lua(%PLAT%)...
+
     "%LuaExe%" "%VPATH%\\Pack.lua" "%VPATH%\\Lua" "%VPATH%\\xlua.lua" "%VPATH%\\xlua.md" >nul
-    if not %errorlevel%==0 goto compile_error
+    if not %errorlevel%==0 goto fail
 
 :res
     echo ==== ==== ==== ==== Building Resource(%PLAT%)...
+
     rc /D "_UNICODE" /D "UNICODE" /l 0x0409 /nologo /fo"%GPATH%\\xlualib.res" "%VPATH%\\xlualib.rc" >nul
     if not %errorlevel%==0 goto compile_error
 
 :dll
     echo ==== ==== ==== ==== Building DLL(%PLAT%)...
+
     %CC% %CFLAGS% %MyCFLAGS% /Fd"%GPATH%\\xlualib.pdb" "%VPATH%\\*.cc" >nul
     if not %errorlevel%==0 goto compile_error
     
     %LNK% /OUT:"%GPATH%\\xlualib.dll" %LFLAGS% %LFLAGS_PLAT_WINDOWS% "%GPATH%\\*.obj" "%GPATH%\\xlualib.res" >nul
     if not %errorlevel%==0 goto link_error
 
+    del "%VPATH%\\xlua.lua"
     del "%GPATH%\\*.obj"
     del "%GPATH%\\*.res"
-    del "%VPATH%\\xlua.lua"
 
 :test
     echo ==== ==== ==== ==== Testing(%PLAT%)...
+
     copy "%LuaBasePath%\\%PLAT%\\luadll.exe" "%GPATH%\\lua.exe" >nul
     copy "%LuaBasePath%\\%PLAT%\\lua.dll" "%GPATH%" >nul
     cd "%GPATH%"
     lua -e "require [[xlualib]]; print( ([[AABBCC]]):show() )" >nul
-    if not %errorlevel%==0 goto link_error
+    if not %errorlevel%==0 goto fail
 
 :done
     echo.
-
     endlocal
 
     if "%1" == "" (
@@ -101,7 +102,6 @@
     )
 
     echo done.
-
     goto end
 
 :compile_error
@@ -110,6 +110,10 @@
 
 :link_error
     echo !!!!!!!!Link error!!!!!!!!
+    goto end
+
+:fail
+    echo !!!!!!!!Fail!!!!!!!!
     goto end
 
 :end
