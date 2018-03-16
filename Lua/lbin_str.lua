@@ -26,11 +26,11 @@ string    string:bin2hex  ( ... );
 
 为了简化参数，设计flag
 
-- flag & 1 表示ASCII
-- flag & 2 表示Unicode
-- flag & 8 表示UTF8
-- flag & 4 表示isup == false
-- flag >= 0x10的部分被当作prews参数
+- flag & 1 表示显示编码为ASCII。（编码不冲突，优先顺序如示）
+- flag & 2 表示显示编码为Unicode
+- flag & 8 表示显示编码为UTF8
+- flag & 4 表示显示hex为小写，默认hex大写显示
+- flag >= 0x10的部分被当作prews参数，如0x20表示前缀2个空格
 
 ```
 string    showbin         ( string data, number flag = 1 );

@@ -32,7 +32,6 @@ string    aes_ecb_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    aes.ecb.p7enc             ( ... );
 string    string:aes_ecb_p7_enc     ( ... );
 
 string    aes_ecb_pkcs7padding_decrypt
@@ -40,7 +39,6 @@ string    aes_ecb_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    aes.ecb.p7dec             ( ... );
 string    string:aes_ecb_p7_dec     ( ... );
 ```
 
@@ -53,7 +51,6 @@ string    aes_cbc_pkcs7padding_encrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.p7enc             ( ... );
 string    string:aes_cbc_p7_enc     ( ... );
 
 string    aes_cbc_pkcs7padding_decrypt
@@ -62,7 +59,6 @@ string    aes_cbc_pkcs7padding_decrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.p7dec             ( ... );
 string    string:aes_cbc_p7_dec     ( ... );
 ```
 
@@ -70,9 +66,6 @@ string    string:aes_cbc_p7_dec     ( ... );
 
 ```
 string    aes_ecb_encrypt           ( string data, string key );
-string    aes.ecb.enc               ( ... );
-string    aes.ecb.enc               ( ... );
-
 string    aes_ecb_decrypt           ( string data, string key );
 string    string:aes_ecb_enc        ( ... );
 string    string:aes_ecb_dec        ( ... );
@@ -86,7 +79,6 @@ string    aes_cbc_encrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.enc               ( ... );
 string    string:aes_cbc_enc        ( ... );
 
 string    aes_cbc_decrypt           (
@@ -94,7 +86,6 @@ string    aes_cbc_decrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
                                     );
-string    aes.cbc.dec               ( ... );
 string    string:aes_cbc_dec        ( ... );
 ```
 
@@ -151,8 +142,9 @@ number    string:crcccitt ( );
 
 ```
 string    tovarint        ( number value, bool signed = false );
-
-// 当返回 usebytes == 0时，表示操作失败
+```
+- 当getvarint返回 usebytes == 0 时，表示操作失败
+```
 number value, number usebytes
           getvarint       ( string data, bool signed = false );
 number value, number usebytes
@@ -162,6 +154,8 @@ number value, number usebytes
 ---- ---- ---- ----
 
 ## TEA
+
+- 提供的KEY长度不足 16 byte时，以\x00补足
 
 ```
 string    TeanEncrypt     ( string data, string key );
@@ -201,6 +195,9 @@ string    string:xxtea_dec( ... );
 
 ## AES RAW
 
+- AES数据块大小 16 byte 。不对齐部分不处理，忽略之
+- 提供的KEY长度不足 16 byte时，以\x00补足
+
 ```
 string    aes_encrypt     ( string data, string key );
 string    aes_decrypt     ( string data, string key );
@@ -212,6 +209,9 @@ string    string:aes_dec  ( ... );
 ---- ---- ---- ----
 
 ## DES RAW
+
+- DES数据块大小 16 byte 。不对齐部分不处理，忽略之
+- 提供的KEY长度不足 8 byte时，以\x00补足
 
 ```
 string    des_encrypt     ( string data, string key );
@@ -248,11 +248,11 @@ string    string:bin2hex  ( ... );
 
 为了简化参数，设计flag
 
-- flag & 1 表示ASCII
-- flag & 2 表示Unicode
-- flag & 8 表示UTF8
-- flag & 4 表示isup == false
-- flag >= 0x10的部分被当作prews参数
+- flag & 1 表示显示编码为ASCII。（编码不冲突，优先顺序如示）
+- flag & 2 表示显示编码为Unicode
+- flag & 8 表示显示编码为UTF8
+- flag & 4 表示显示hex为小写，默认hex大写显示
+- flag >= 0x10的部分被当作prews参数，如0x20表示前缀2个空格
 
 ```
 string    showbin         ( string data, number flag = 1 );
@@ -328,7 +328,6 @@ string    blowfish_ecb_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    blowfish.ecb.p7enc        ( ... );
 string    string:bf_ecb_p7_enc      ( ... );
 
 string    blowfish_ecb_pkcs7padding_decrypt
@@ -336,7 +335,6 @@ string    blowfish_ecb_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    blowfish.ecb.p7dec        ( ... );
 string    string:bf_ecb_p7_dec      ( ... );
 ```
 
@@ -349,7 +347,6 @@ string    blowfish_cbc_pkcs7padding_encrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.p7enc        ( ... );
 string    string:bf_cbc_p7_enc      ( ... );
 
 string    blowfish_cbc_pkcs7padding_decrypt
@@ -358,7 +355,6 @@ string    blowfish_cbc_pkcs7padding_decrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.p7dec        ( ... );
 string    string:bf_cbc_p7_dec      ( ... );
 ```
 
@@ -366,11 +362,8 @@ string    string:bf_cbc_p7_dec      ( ... );
 
 ```
 string    blowfish_ecb_encrypt      ( string data, string key );
-string    blowfish.ecb.enc          ( ... );
-string    string:bf_ecb_enc         ( ... );
-
 string    blowfish_ecb_decrypt      ( string data, string key );
-string    blowfish.ecb.enc          ( ... );
+string    string:bf_ecb_enc         ( ... );
 string    string:bf_ecb_dec         ( ... );
 ```
 
@@ -382,7 +375,6 @@ string    blowfish_cbc_encrypt      (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.enc          ( ... );
 string    string:bf_cbc_enc         ( ... );
 
 string    blowfish_cbc_decrypt      (
@@ -390,7 +382,6 @@ string    blowfish_cbc_decrypt      (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    blowfish.cbc.dec          ( ... );
 string    string:bf_cbc_dec         ( ... );
 ```
 
@@ -410,7 +401,6 @@ string    des_ecb_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb.p7enc             ( ... );
 string    string:des_ecb_p7_enc     ( ... );
 
 string    des_ecb_pkcs7padding_decrypt
@@ -418,7 +408,6 @@ string    des_ecb_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb.p7dec             ( ... );
 string    string:des_ecb_p7_dec     ( ... );
 ```
 
@@ -431,7 +420,6 @@ string    des_cbc_pkcs7padding_encrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.p7enc             ( ... );
 string    string:des_cbc_p7_enc     ( ... );
 
 string    des_cbc_pkcs7padding_decrypt
@@ -440,7 +428,6 @@ string    des_cbc_pkcs7padding_decrypt
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.p7dec             ( ... );
 string    string:des_cbc_p7_dec     ( ... );
 ```
 
@@ -453,7 +440,6 @@ string    des_ncbc_pkcs7padding_encrypt
                                     string key
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.p7enc            ( ... );
 string    string:des_ncbc_p7_enc    ( ... );
 
 string    des_ncbc_pkcs7padding_decrypt
@@ -462,7 +448,6 @@ string    des_ncbc_pkcs7padding_decrypt
                                     string key
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.p7dec            ( ... );
 string    string:des_ncbc_p7_dec    ( ... );
 ```
 
@@ -479,7 +464,6 @@ string    des_ecb3_pkcs7padding_encrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb3.p7enc            ( ... );
 string    string:des_ecb3_p7_enc    ( ... );
 
 string    des_ecb3_pkcs7padding_decrypt
@@ -487,7 +471,6 @@ string    des_ecb3_pkcs7padding_decrypt
                                     string data,
                                     string key
                                     );
-string    des.ecb3.p7dec            ( ... );
 string    string:des_ecb3_p7_dec    ( ... );
 ```
 
@@ -495,9 +478,6 @@ string    string:des_ecb3_p7_dec    ( ... );
 
 ```
 string    des_ecb_encrypt           ( string data, string key );
-string    des.ecb.enc               ( ... );
-string    des.ecb.enc               ( ... );
-
 string    des_ecb_decrypt           ( string data, string key );
 string    string:des_ecb_enc        ( ... );
 string    string:des_ecb_dec        ( ... );
@@ -511,7 +491,6 @@ string    des_cbc_encrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.enc               ( ... );
 string    string:des_cbc_enc        ( ... );
 
 string    des_cbc_decrypt           (
@@ -519,7 +498,6 @@ string    des_cbc_decrypt           (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.cbc.dec               ( ... );
 string    string:des_cbc_dec        ( ... );
 ```
 
@@ -531,7 +509,6 @@ string    des_ncbc_encrypt          (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.enc            ( ... );
 string    string:des_ncbc_enc     ( ... );
 
 string    des_ncbc_decrypt          (
@@ -539,19 +516,16 @@ string    des_ncbc_decrypt          (
                                     string key,
                                     string ivec = "\0\0\0\0\0\0\0\0"
                                     );
-string    des.ncbc.dec            ( ... );
 string    string:des_ncbc_dec     ( ... );
 ```
 
 ### 3DES/ECB/NoPadding
 
 ```
-string    des_ecb3_encrypt          ( string data, string key );
-string    des.ecb3.enc            ( ... );
+string    des_ecb3_encrypt        ( string data, string key );
 string    string:des_ecb3_enc     ( ... );
 
 string    des_ecb3_decrypt          ( string data, string key );
-string    des.ecb3.enc            ( ... );
 string    string:des_ecb3_dec     ( ... );
 ```
 
@@ -575,37 +549,37 @@ bool      deletemem       ( void* lpmem );  // 释放由newmem申请的内存
   参数value不存在时，视为读内存操作，成功则返回相应值，失败则抛出错误
   参数value存在时，视为读内存操作，成功则无返回值，失败则抛出错误
 */
-          mkb             ( void* lpmem [, number value] ); // 读/写无符号byte值，小端
-          mkB             ( void* lpmem [, number value] ); // 读/写无符号byte值，大端
-          mkbs            ( void* lpmem [, number value] ); // 读/写有符号byte值，小端
-          mkBs            ( void* lpmem [, number value] ); // 读/写有符号byte值，大端
+          mkb             ( void* lp [, number v] ); // 读/写无符号byte值，小端
+          mkB             ( void* lp [, number v] ); // 读/写无符号byte值，大端
+          mkbs            ( void* lp [, number v] ); // 读/写有符号byte值，小端
+          mkBs            ( void* lp [, number v] ); // 读/写有符号byte值，大端
 
-          mkw             ( void* lpmem [, number value] ); // 读/写无符号word值，小端
-          mkW             ( void* lpmem [, number value] ); // 读/写无符号word值，大端
-          mkws            ( void* lpmem [, number value] ); // 读/写有符号word值，小端
-          mkWs            ( void* lpmem [, number value] ); // 读/写有符号word值，大端
+          mkw             ( void* lp [, number v] ); // 读/写无符号word值，小端
+          mkW             ( void* lp [, number v] ); // 读/写无符号word值，大端
+          mkws            ( void* lp [, number v] ); // 读/写有符号word值，小端
+          mkWs            ( void* lp [, number v] ); // 读/写有符号word值，大端
 
-          mkd             ( void* lpmem [, number value] ); // 读/写无符号dword值，小端
-          mkD             ( void* lpmem [, number value] ); // 读/写无符号dword值，大端
-          mkds            ( void* lpmem [, number value] ); // 读/写有符号dword值，小端
-          mkDs            ( void* lpmem [, number value] ); // 读/写有符号dword值，大端
+          mkd             ( void* lp [, number v] ); // 读/写无符号dword值，小端
+          mkD             ( void* lp [, number v] ); // 读/写无符号dword值，大端
+          mkds            ( void* lp [, number v] ); // 读/写有符号dword值，小端
+          mkDs            ( void* lp [, number v] ); // 读/写有符号dword值，大端
 
-          mkq             ( void* lpmem [, number value] ); // 读/写无符号qword值，小端
-          mkQ             ( void* lpmem [, number value] ); // 读/写无符号qword值，大端
-          mkqs            ( void* lpmem [, number value] ); // 读/写有符号qword值，小端
-          mkQs            ( void* lpmem [, number value] ); // 读/写有符号qword值，大端
+          mkq             ( void* lp [, number v] ); // 读/写无符号qword值，小端
+          mkQ             ( void* lp [, number v] ); // 读/写无符号qword值，大端
+          mkqs            ( void* lp [, number v] ); // 读/写有符号qword值，小端
+          mkQs            ( void* lp [, number v] ); // 读/写有word值，大端
 
-          mkf             ( void* lpmem [, number value] ); // 读/写float值，小端
-          mkF             ( void* lpmem [, number value] ); // 读/写float值，大端
+          mkf             ( void* lp [, number v] ); // 读/写float值，小端
+          mkF             ( void* lp [, number v] ); // 读loat值，大端
 
-          mkdb            ( void* lpmem [, number value] ); // 读/写double值，小端
-          mkDBs           ( void* lpmem [, number value] ); // 读/写double值，大端
+          mkdb            ( void* lp [, number v] ); // 读/写double值，小端
+          mkDBs           ( void* lp [, number v] ); // 读/写double值，大端
 
-number    bswap           ( number value, number size = 4|8 ); // 指定翻转数据
-number    bswap_byte      ( number value );
-number    bswap_word      ( number value );
-number    bswap_dword     ( number value );
-number    bswap_qword     ( number value );
+number    bswap           ( number v, number size = 4|8 ); // 指定翻转数据
+number    bswap_byte      ( number v );
+number    bswap_word      ( number v );
+number    bswap_dword     ( number v );
+number    bswap_qword     ( number v );
 ```
 
 ---- ---- ---- ----
@@ -646,32 +620,20 @@ void      RsaKey:__gc               ( );
 string    RsaKey:__tostring         ( );  // 返回"RsaKey*:####"
 
 RsaKey    rsa_open_public_key       ( string filename );
-RsaKey    rsa.pub.open              ( ... );
-
-RsaKey    rsa_set_public_key        ( string rsakey );
-RsaKey    rsa.pub.set               ( ... );
-
 RsaKey    rsa_open_private_key      ( string filename );
-RsaKey    rsa.prv.open              ( ... );
-
+RsaKey    rsa_set_public_key        ( string rsakey );
 RsaKey    rsa_set_private_key       ( string rsakey );
-RsaKey    rsa.prv.set               ( ... );
+
 
 string    rsa_public_encrypt        ( string data, RsaKey key );
-string    rsa.pub.enc               ( ... );
-string    string:rsa_pub_enc        ( ... );
-
 string    rsa_public_decrypt        ( string data, RsaKey key );
-string    rsa.pub.dec               ( ... );
+string    string:rsa_pub_enc        ( ... );
 string    string:rsa_pub_dec        ( ... );
 
 
 string    rsa_private_encrypt       ( string data, RsaKey key );
-string    rsa.prv.enc               ( ... );
-string    string:rsa_prv_enc        ( ... );
-
 string    rsa_private_decrypt       ( string data, RsaKey key );
-string    rsa.prv.dec               ( ... );
+string    string:rsa_prv_enc        ( ... );
 string    string:rsa_prv_dec        ( ... );
 ```
 
@@ -732,8 +694,6 @@ string    string:sha512             ( );
 ---- ---- ---- ----
 
 ## PE
-
-- Lua5.3以下无法正确使用此函数
 
 ```
 table     PE              ( number hmod = nullptr );
@@ -881,7 +841,8 @@ void      TCP:__gc        ( );
 string    TCP:__tostring  ( );
 ```
 
-- 以下函数，Server不支持
+以下函数，Server不支持
+
 - 接收延时，毫秒计（默认取消延时）
 ```
 TCP       TCP:settimeout  ( int timeout = -1 );
@@ -900,7 +861,7 @@ string    TCP:recv        ( number size = 0x800 );
 bool      TCP:check       ( );
 ```
 
-- 以下函数，Client不支持
+以下函数，Client不支持
 
 - 当不提供timeout时，默认超时值-1，即阻塞直到连接发生
 - 当提供timeout(毫秒计)时，阻塞指定时间，直到连接发生或超时返回
@@ -938,8 +899,7 @@ table, table
 ```
 void      Sleep           ( number ms = 0 );    // 暂停线程ms毫秒，ms允许为空
 number    GetTickCount    ( );                  // 获取系统启动时间毫秒数
-        
-// Lua5.3以下无法正确使用以下函数
+
 HMODULE   GetModuleHandle ( string mod_name = "" );
 HMODULE   LoadLibrary     ( string lib_name );  // 失败返回nil, errorcode
 void      FreeLibrary     ( HMODULE mode );     // 失败返回errorcode
@@ -953,8 +913,12 @@ void*     GetProcAddress  ( HMODULE mode, string name );
 - 访问错误时，抛出错误
 
 ```
-/*
-options表可以设置如下参数(注意小写名称)：
+number response_code, table response_headers, string response_body
+          xhttp                     ( string url, table options = {} );
+```
+
+- options表可以设置如下参数(注意小写名称)：
+```
   {
   ["connect_time_out"]  = number;   // 连接超时，毫秒计，默认20000，即20s
   ["time_out"]          = string;   // 访问超时，毫秒计，默认10000，即10s
@@ -965,29 +929,27 @@ options表可以设置如下参数(注意小写名称)：
   ["verbose"]           = bool;     // 细节展示，默认false不展示
   ["header"]            = table;    // http head。以  [键名] = 值  形式组表
   }
+```
 
 示例代码：
-
-  local c, h, b = xhttp("http://www.qq.com");
+```
+  local c, h, b = xhttp( "http://www.qq.com" );
   for k, v in pairs( h ) do
     xlog( "key:" .. k, "value:" .. v );
   end
 
-  local c, h, b = xhttp("http://www.qq.com",
-                        {
-                        connect_time_out = 10000,
-                        time_out = 500,
-                        proxy = "127.0.0.1:8080",
-                        data = "post data",
-                        header =
-                          {
+  local c, h, b = xhttp( "http://www.qq.com",
+                         {
+                         connect_time_out = 10000,
+                         time_out = 500,
+                         proxy = "127.0.0.1:8080",
+                         data = "post data",
+                         header =
+                           {
                           xxx = "xxxx";
-                          }
-                        }
+                           }
+                         }
                        );
-*/
-number response_code, table response_headers, string response_body
-          xhttp                     ( string url, table options = {} );
 ```
 
 ---- ---- ---- ----
@@ -1005,18 +967,22 @@ void      xlog            ( ... );
 void      dbgview         ( ... );
 ```
 
-xlog_level用于控制输出
+- 输出控制
 
-- "off"       // 屏蔽输出
-- "fatal"     // 致命错误，程序无法继续执行
-- "error"     // 反映错误，例如一些API的调用失败
-- "warn"      // 反映某些需要注意的可能有潜在危险的情况，可能会造成崩溃或逻辑错误之类
-- "info"      // 表示程序进程的信息
-- "debug"     // 普通的调试信息，这类信息发布时一般不输出
-- "trace"     // 最精细的调试信息，多用于定位错误，查看某些变量的值
-- "on"        // 全输出（默认）
 ```
-string    xlog_level;
+enum xlog_level_enum =
+  {
+  off         = 0, // 屏蔽输出
+  fatal       = 1, // 致命错误，程序无法继续执行
+  error       = 2, // 反映错误，例如一些API的调用失败
+  warn        = 3, // 反映某些需要注意的可能有潜在危险的情况，可能会造成崩溃或逻辑错误之类
+  info        = 4, // 表示程序进程的信息
+  debug       = 5, // 普通的调试信息，这类信息发布时一般不输出
+  trace       = 6, // 最精细的调试信息，多用于定位错误，查看某些变量的值
+  on          = 7, // 全输出（默认）
+  }
+
+number    xlog_level = xlog_level_enum.on;
 ```
 
 - 根据xlog_level的动态调试等级，决定是否输出信息
@@ -1044,7 +1010,7 @@ void      string:xtrace   ( ... );
 
 ## zlib
 
-- 压缩/解压失败，返回nil & 错误码
+- 压缩/解压失败，返回"" & 错误码
 
 ```
 string    zlib_compress   ( string data );
@@ -1057,7 +1023,7 @@ string    string:zup      ( );
 
 ## gzip
 
-- 压缩/解压失败，返回nil & 错误信息
+- 压缩/解压失败，返回"" & 错误码 [& 错误码]
 - gzip解压时，尝试带head/不带head的gzip解压，以及deflate解压
 
 ```

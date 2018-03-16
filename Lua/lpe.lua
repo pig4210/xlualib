@@ -3,8 +3,6 @@
 
 ## PE
 
-- Lua5.3以下无法正确使用此函数
-
 ```
 table     PE              ( number hmod = nullptr );
 table     PE              ( string mod_name );

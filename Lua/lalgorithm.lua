@@ -65,8 +65,9 @@ string.crcccitt       = function( ... ) return crcccitt                    ( ...
 
 ```
 string    tovarint        ( number value, bool signed = false );
-
-// 当返回 usebytes == 0时，表示操作失败
+```
+- 当getvarint返回 usebytes == 0 时，表示操作失败
+```
 number value, number usebytes
           getvarint       ( string data, bool signed = false );
 number value, number usebytes
@@ -79,6 +80,8 @@ string.getvarint      =  function( ... ) return getvarint                  ( ...
 ---- ---- ---- ----
 
 ## TEA
+
+- 提供的KEY长度不足 16 byte时，以\x00补足
 
 ```
 string    TeanEncrypt     ( string data, string key );
@@ -130,6 +133,9 @@ string.xxtea_dec      =  function( ... ) return XxTeaDecrypt               ( ...
 
 ## AES RAW
 
+- AES数据块大小 16 byte 。不对齐部分不处理，忽略之
+- 提供的KEY长度不足 16 byte时，以\x00补足
+
 ```
 string    aes_encrypt     ( string data, string key );
 string    aes_decrypt     ( string data, string key );
@@ -145,6 +151,9 @@ string.aes_dec        =  function( ... ) return aes_decrypt                ( ...
 ---- ---- ---- ----
 
 ## DES RAW
+
+- DES数据块大小 16 byte 。不对齐部分不处理，忽略之
+- 提供的KEY长度不足 8 byte时，以\x00补足
 
 ```
 string    des_encrypt     ( string data, string key );

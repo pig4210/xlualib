@@ -3,7 +3,7 @@
 
 ## zlib
 
-- 压缩/解压失败，返回nil & 错误码
+- 压缩/解压失败，返回"" & 错误码
 
 ```
 string    zlib_compress   ( string data );
@@ -19,7 +19,7 @@ string.zup            = function( ... ) return zlib_uncompress             ( ...
 
 ## gzip
 
-- 压缩/解压失败，返回nil & 错误信息
+- 压缩/解压失败，返回"" & 错误码 [& 错误码]
 - gzip解压时，尝试带head/不带head的gzip解压，以及deflate解压
 
 ```

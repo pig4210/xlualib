@@ -120,7 +120,8 @@ void      TCP:__gc        ( );
 string    TCP:__tostring  ( );
 ```
 
-- 以下函数，Server不支持
+以下函数，Server不支持
+
 - 接收延时，毫秒计（默认取消延时）
 ```
 TCP       TCP:settimeout  ( int timeout = -1 );
@@ -139,7 +140,7 @@ string    TCP:recv        ( number size = 0x800 );
 bool      TCP:check       ( );
 ```
 
-- 以下函数，Client不支持
+以下函数，Client不支持
 
 - 当不提供timeout时，默认超时值-1，即阻塞直到连接发生
 - 当提供timeout(毫秒计)时，阻塞指定时间，直到连接发生或超时返回

@@ -13,50 +13,23 @@ void      RsaKey:__gc               ( );
 string    RsaKey:__tostring         ( );  // 返回"RsaKey*:####"
 
 RsaKey    rsa_open_public_key       ( string filename );
-RsaKey    rsa.pub.open              ( ... );
-
-RsaKey    rsa_set_public_key        ( string rsakey );
-RsaKey    rsa.pub.set               ( ... );
-
 RsaKey    rsa_open_private_key      ( string filename );
-RsaKey    rsa.prv.open              ( ... );
-
+RsaKey    rsa_set_public_key        ( string rsakey );
 RsaKey    rsa_set_private_key       ( string rsakey );
-RsaKey    rsa.prv.set               ( ... );
+
 
 string    rsa_public_encrypt        ( string data, RsaKey key );
-string    rsa.pub.enc               ( ... );
-string    string:rsa_pub_enc        ( ... );
-
 string    rsa_public_decrypt        ( string data, RsaKey key );
-string    rsa.pub.dec               ( ... );
+string    string:rsa_pub_enc        ( ... );
 string    string:rsa_pub_dec        ( ... );
 
 
 string    rsa_private_encrypt       ( string data, RsaKey key );
-string    rsa.prv.enc               ( ... );
-string    string:rsa_prv_enc        ( ... );
-
 string    rsa_private_decrypt       ( string data, RsaKey key );
-string    rsa.prv.dec               ( ... );
+string    string:rsa_prv_enc        ( ... );
 string    string:rsa_prv_dec        ( ... );
 ```
 ]=======]
-
-rsa = {};
-rsa.pub = {};
-rsa.prv = {};
-
-rsa.pub.open          = function( ... ) return rsa_open_public_key         ( ... ); end
-rsa.pub.set           = function( ... ) return rsa_set_public_key          ( ... ); end
-rsa.pub.enc           = function( ... ) return rsa_public_encrypt          ( ... ); end
-rsa.pub.dec           = function( ... ) return rsa_public_decrypt          ( ... ); end
-                                                                           
-rsa.prv.open          = function( ... ) return rsa_open_private_key        ( ... ); end
-rsa.prv.set           = function( ... ) return rsa_set_private_key         ( ... ); end
-rsa.prv.enc           = function( ... ) return rsa_private_encrypt         ( ... ); end
-rsa.prv.dec           = function( ... ) return rsa_private_decrypt         ( ... ); end
-                                                                           
 string.rsa_pub_enc    = function( ... ) return rsa_public_encrypt          ( ... ); end
 string.rsa_pub_dec    = function( ... ) return rsa_public_decrypt          ( ... ); end
 string.rsa_prv_enc    = function( ... ) return rsa_private_encrypt         ( ... ); end

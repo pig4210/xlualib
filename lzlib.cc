@@ -18,6 +18,7 @@ static int LUA_C_zlib_compress(lua_State* ls)
     lua_pushstring(ls, "");
     return 1;
     }
+    
   size_t size = compressBound(l);
   unsigned char* data = new unsigned char[size];
   while(true)
@@ -42,7 +43,7 @@ static int LUA_C_zlib_compress(lua_State* ls)
         break;
       }
     delete[] data;
-    lua_pushnil(ls);
+    lua_pushstring(ls, "");
     lua_pushinteger(ls, rets);
     return 2;
     }
@@ -83,7 +84,7 @@ static int LUA_C_zlib_uncompress(lua_State* ls)
         break;
       }
     delete[] data;
-    lua_pushnil(ls);
+    lua_pushstring(ls, "");
     lua_pushinteger(ls, rets);
     return 2;
     }
@@ -116,7 +117,7 @@ static int LUA_C_gzip_compress(lua_State* ls)
     if(rets != Z_OK)
       {
       delete[] data;
-      lua_pushnil(ls);
+      lua_pushstring(ls, "");
       lua_pushinteger(ls, rets);
       return 2;
       }
@@ -147,7 +148,7 @@ static int LUA_C_gzip_compress(lua_State* ls)
         break;
       }
     delete[] data;
-    lua_pushnil(ls);
+    lua_pushstring(ls, "");
     lua_pushinteger(ls, rets);
     lua_pushinteger(ls, rend);
     return 3;
@@ -189,7 +190,7 @@ static int LUA_C_gzip_uncompress(lua_State* ls)
     intptr_t rets = inflateInit2(&d_stream, raw_deflate ? -MAX_WBITS : MAX_WBITS + 16);
     if(rets != Z_OK)
       {
-      lua_pushnil(ls);
+      lua_pushstring(ls, "");
       lua_pushinteger(ls, rets);
       return 2;
       }
@@ -231,7 +232,7 @@ static int LUA_C_gzip_uncompress(lua_State* ls)
       default:
         break;
       }
-    lua_pushnil(ls);
+    lua_pushstring(ls, "");
     lua_pushinteger(ls, rets);
     lua_pushinteger(ls, rend);
     return 3;

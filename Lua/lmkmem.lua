@@ -19,47 +19,47 @@ bool      deletemem       ( void* lpmem );  // 释放由newmem申请的内存
   参数value不存在时，视为读内存操作，成功则返回相应值，失败则抛出错误
   参数value存在时，视为读内存操作，成功则无返回值，失败则抛出错误
 */
-          mkb             ( void* lpmem [, number value] ); // 读/写无符号byte值，小端
-          mkB             ( void* lpmem [, number value] ); // 读/写无符号byte值，大端
-          mkbs            ( void* lpmem [, number value] ); // 读/写有符号byte值，小端
-          mkBs            ( void* lpmem [, number value] ); // 读/写有符号byte值，大端
+          mkb             ( void* lp [, number v] ); // 读/写无符号byte值，小端
+          mkB             ( void* lp [, number v] ); // 读/写无符号byte值，大端
+          mkbs            ( void* lp [, number v] ); // 读/写有符号byte值，小端
+          mkBs            ( void* lp [, number v] ); // 读/写有符号byte值，大端
 
-          mkw             ( void* lpmem [, number value] ); // 读/写无符号word值，小端
-          mkW             ( void* lpmem [, number value] ); // 读/写无符号word值，大端
-          mkws            ( void* lpmem [, number value] ); // 读/写有符号word值，小端
-          mkWs            ( void* lpmem [, number value] ); // 读/写有符号word值，大端
+          mkw             ( void* lp [, number v] ); // 读/写无符号word值，小端
+          mkW             ( void* lp [, number v] ); // 读/写无符号word值，大端
+          mkws            ( void* lp [, number v] ); // 读/写有符号word值，小端
+          mkWs            ( void* lp [, number v] ); // 读/写有符号word值，大端
 
-          mkd             ( void* lpmem [, number value] ); // 读/写无符号dword值，小端
-          mkD             ( void* lpmem [, number value] ); // 读/写无符号dword值，大端
-          mkds            ( void* lpmem [, number value] ); // 读/写有符号dword值，小端
-          mkDs            ( void* lpmem [, number value] ); // 读/写有符号dword值，大端
+          mkd             ( void* lp [, number v] ); // 读/写无符号dword值，小端
+          mkD             ( void* lp [, number v] ); // 读/写无符号dword值，大端
+          mkds            ( void* lp [, number v] ); // 读/写有符号dword值，小端
+          mkDs            ( void* lp [, number v] ); // 读/写有符号dword值，大端
 
-          mkq             ( void* lpmem [, number value] ); // 读/写无符号qword值，小端
-          mkQ             ( void* lpmem [, number value] ); // 读/写无符号qword值，大端
-          mkqs            ( void* lpmem [, number value] ); // 读/写有符号qword值，小端
-          mkQs            ( void* lpmem [, number value] ); // 读/写有符号qword值，大端
+          mkq             ( void* lp [, number v] ); // 读/写无符号qword值，小端
+          mkQ             ( void* lp [, number v] ); // 读/写无符号qword值，大端
+          mkqs            ( void* lp [, number v] ); // 读/写有符号qword值，小端
+          mkQs            ( void* lp [, number v] ); // 读/写有word值，大端
 
-          mkf             ( void* lpmem [, number value] ); // 读/写float值，小端
-          mkF             ( void* lpmem [, number value] ); // 读/写float值，大端
+          mkf             ( void* lp [, number v] ); // 读/写float值，小端
+          mkF             ( void* lp [, number v] ); // 读loat值，大端
 
-          mkdb            ( void* lpmem [, number value] ); // 读/写double值，小端
-          mkDBs           ( void* lpmem [, number value] ); // 读/写double值，大端
+          mkdb            ( void* lp [, number v] ); // 读/写double值，小端
+          mkDBs           ( void* lp [, number v] ); // 读/写double值，大端
 
-number    bswap           ( number value, number size = 4|8 ); // 指定翻转数据
-number    bswap_byte      ( number value );
-number    bswap_word      ( number value );
-number    bswap_dword     ( number value );
-number    bswap_qword     ( number value );
+number    bswap           ( number v, number size = 4|8 ); // 指定翻转数据
+number    bswap_byte      ( number v );
+number    bswap_word      ( number v );
+number    bswap_dword     ( number v );
+number    bswap_qword     ( number v );
 ```
 ]=======]
 local function mkX( fmt, lp, value )
   if not value then
-    local ss = readmem( lp, string.packsize( fmt) );
-    return ( string.unpack( fmt, ss ) );
+    return ( string.unpack( fmt,
+      readmem( lp, string.packsize( fmt) )
+      ) );
   end
 
-  local v = string.pack( fmt, value );
-  return writemem( lp, v );
+  return writemem( lp, string.pack( fmt, value ) );
 end
 
 function mkb  ( lp, value )  return mkX( "<I1", lp, value );  end

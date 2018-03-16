@@ -14,42 +14,43 @@ void      xlog            ( ... );
 void      dbgview         ( ... );
 ```
 
-xlog_level用于控制输出
+- 输出控制
 
-- "off"       // 屏蔽输出
-- "fatal"     // 致命错误，程序无法继续执行
-- "error"     // 反映错误，例如一些API的调用失败
-- "warn"      // 反映某些需要注意的可能有潜在危险的情况，可能会造成崩溃或逻辑错误之类
-- "info"      // 表示程序进程的信息
-- "debug"     // 普通的调试信息，这类信息发布时一般不输出
-- "trace"     // 最精细的调试信息，多用于定位错误，查看某些变量的值
-- "on"        // 全输出（默认）
 ```
-string    xlog_level;
+enum xlog_level_enum =
+  {
+  off         = 0, // 屏蔽输出
+  fatal       = 1, // 致命错误，程序无法继续执行
+  error       = 2, // 反映错误，例如一些API的调用失败
+  warn        = 3, // 反映某些需要注意的可能有潜在危险的情况，可能会造成崩溃或逻辑错误之类
+  info        = 4, // 表示程序进程的信息
+  debug       = 5, // 普通的调试信息，这类信息发布时一般不输出
+  trace       = 6, // 最精细的调试信息，多用于定位错误，查看某些变量的值
+  on          = 7, // 全输出（默认）
+  }
+
+number    xlog_level = xlog_level_enum.on;
 ```
 ]=======]
-xlog_level = "on";
+xlog_level_enum = setmetatable(
+  {
+  off         = 0,
+  fatal       = 1,
+  error       = 2,
+  warn        = 3,
+  info        = 4,
+  debug       = 5,
+  trace       = 6,
+  on          = 7,
+  },
+  {
+    __newindex = function()
+      return error( "ENUM禁止修改" );
+    end;
+  }
+  );
 
-local function chk_lvl()
-  local lvl = xlog_level:lower();
-  if lvl == "off" then
-    return 0;
-  elseif lvl == "fatal" then
-    return 1;
-  elseif lvl == "error" then
-    return 2;
-  elseif lvl == "warn" then
-    return 3;
-  elseif lvl == "info" then
-    return 4;
-  elseif lvl == "debug" then
-    return 5;
-  elseif lvl == "trace" then
-    return 6;
-  --else if lvl == "on" then
-  end
-  return 7;
-end
+xlog_level = xlog_level_enum.on;
 --[=======[
 - 根据xlog_level的动态调试等级，决定是否输出信息
 - 函数组底层调用xlog输出信息，修改xlog函数能实现信息转向
@@ -72,12 +73,12 @@ void      string:xdbg     ( ... );
 void      string:xtrace   ( ... );
 ```
 ]=======]
-function xfail( ... )   if chk_lvl( ) < 1 then return; end return xlog( ... ); end
-function xerr( ... )    if chk_lvl( ) < 2 then return; end return xlog( ... ); end
-function xwarn( ... )   if chk_lvl( ) < 3 then return; end return xlog( ... ); end
-function xinfo( ... )   if chk_lvl( ) < 4 then return; end return xlog( ... ); end
-function xdbg( ... )    if chk_lvl( ) < 5 then return; end return xlog( ... ); end
-function xtrace( ... )  if chk_lvl( ) < 6 then return; end return xlog( ... ); end
+function xfail( ... )   if xlog_level < 1 then return; end return xlog( ... ); end
+function xerr( ... )    if xlog_level < 2 then return; end return xlog( ... ); end
+function xwarn( ... )   if xlog_level < 3 then return; end return xlog( ... ); end
+function xinfo( ... )   if xlog_level < 4 then return; end return xlog( ... ); end
+function xdbg( ... )    if xlog_level < 5 then return; end return xlog( ... ); end
+function xtrace( ... )  if xlog_level < 6 then return; end return xlog( ... ); end
 
 string.xlog           = function( ... ) return xlog                        ( ... ); end
 string.xfail          = function( ... ) return xfail                       ( ... ); end

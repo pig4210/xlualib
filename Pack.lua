@@ -1,6 +1,5 @@
 local argv = { ... };
 
-
 local function readfile( filename )
     local file, err = io.open( filename, "rb" );
     if not file then
@@ -22,7 +21,7 @@ local function writefile( data, filename )
     return e;
 end
 
-local function EnumFile( path,  filter )
+local function EnumFile( path, filter )
     print( "EnumFile", path, filter );
     local cmd, err = io.popen(
         [[for /r "]] .. path .. [[" %f in (]] .. filter .. [[) do @echo %f]],
